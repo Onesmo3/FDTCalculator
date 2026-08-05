@@ -1,1 +1,2 @@
 # FDTCalculator
+FDT Calculator — Sand Cone Method is a field tool for QA/QC on road construction projects (AASHTO T191 / ASTM D1556), built to help geotechnical/civil field technicians calculate Field Density Test results quickly and accurately, directly on site — with no internet connection required. The app stores your settings (cylinders, layers, project info) and test results directly on your device.
