@@ -8,7 +8,7 @@
    ili simu zipakue toleo jipya. Kama hutabadilisha CACHE_NAME, Service
    Worker itaendelea kutumia faili za ZAMANI zilizohifadhiwa kwenye
    cache, hata ukishasasisha faili kwenye Netlify. */
-const CACHE_NAME = "fdt-v21";
+const CACHE_NAME = "fdt-v22";
 
 const ASSETS_TO_CACHE = [
   "./",
