@@ -1445,16 +1445,34 @@ function showToast(msg, type){
 
 /* Njia ya kupakua inayofanya kazi kwenye vivinjari/mazingira mengi zaidi ya simu */
 async function triggerDownload(content, filename, mime){
-  const blob = new Blob([content], {type:mime});
+  const blob = (content instanceof Blob) ? content : new Blob([content], {type:mime});
 
-  /* MUHIMU: HATUTUMII navigator.share() hapa kwa MAKUSUDI. Uchunguzi wa kina
-     umeonyesha kuwa baadhi ya WebView (mf. zile za WebIntoApp) zina "polyfill"
-     yao ya ndani ya navigator.share() inayopitisha faili kwenda kwa native
-     Android kupitia "bridge" inayochakata data kama maandishi ya UTF-8 - hii
-     huharibu binary data (kama picha za JPEG) kwa kubadilisha bytes zisizo za
-     kawaida kuwa "U+FFFD" replacement character. Blob + anchor download
-     hapa chini haitumii bridge yoyote ya native - inabaki ndani ya WebView
-     wenyewe, kwa hiyo ni salama zaidi. */
+  /* Tunajaribu navigator.share() KWANZA. Sababu: baadhi ya WebView wrapper
+     apps (mf. AIDE Web-to-App) zinatumia Android DownloadListener kwa blob:
+     URLs, ambayo HAISOMI jina la faili kutoka <a download> attribute -
+     badala yake inabahatisha jina kutoka kwenye blob URL yenyewe (UUID ya
+     random), ikitoa majina ya "mchanganyiko wa herufi na namba". navigator.
+     share() inapitisha jina kama sehemu ya File metadata halisi, ikipita
+     tatizo hilo kabisa.
+     TAHADHARI (historia ya project hii): WebView za zamani (WebIntoApp)
+     zilikuwa na bug inayoharibu binary data (PDF/picha) kupitia share
+     bridge yao. Kama utaona PDF zikiharibika/kutofunguka baada ya update
+     hii kwenye APK ya AIDE, tuambie MARA MOJA ili turudi kwenye blob+anchor
+     pekee (fallback hapa chini). */
+  try{
+    if(navigator.share && navigator.canShare){
+      const file = new File([blob], filename, {type:mime});
+      if(navigator.canShare({files:[file]})){
+        await navigator.share({files:[file]});
+        showToast(`Shared: ${filename}`, "ok");
+        return;
+      }
+    }
+  }catch(err){
+    if(err && err.name === "AbortError") return; // mtumiaji ameghairi share sheet mwenyewe
+    console.warn("navigator.share failed, falling back to direct download:", err);
+  }
+
   try{
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -1732,25 +1750,13 @@ async function downloadPDF(){
   const stamp = new Date().toISOString().slice(0,10);
   const filename = `FDT_${groupFilename(groups)}_${stamp}.pdf`;
 
-  /* MUHIMU: HATUTUMII navigator.share() hapa kwa MAKUSUDI - ndiyo chanzo
-     halisi cha logo/picha kuharibika (corruption) kilichogunduliwa: baadhi ya
-     WebView (mf. WebIntoApp) zina "polyfill" ya ndani ya navigator.share()
-     inayopitisha faili kupitia "bridge" ya native inayochakata data kama
-     maandishi ya UTF-8, na hivyo kuharibu binary bytes za picha zilizomo
-     ndani ya PDF. Blob + anchor download hapa chini haitumii bridge yoyote
-     ya native - inabaki ndani ya WebView wenyewe, salama zaidi. */
+  /* Kupakua kunapitia triggerDownload() - inajaribu navigator.share() kwanza
+     (jina sahihi la faili hata kwenye WebView wrapper apps), kisha inarudi
+     kwenye blob+anchor kama share haipatikani. Angalia maelezo kamili
+     kwenye function ya triggerDownload() hapo juu. */
   try{
     const blob = doc.output("blob");
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = filename;
-    a.rel = "noopener";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    setTimeout(()=>URL.revokeObjectURL(url), 2000);
-    showToast(`Downloaded: ${filename} — check your Downloads folder or device notifications.`, "ok");
+    await triggerDownload(blob, filename, "application/pdf");
     showAlert(`PDF downloaded: ${filename}\n\nThis PDF is protected against editing. The password to edit it (owner password) is:\n\n${ownerPwd}\n\nSave this if you'll need to edit the PDF later — without this password, others can only read/print it, not edit it.`);
   }catch(err){
     showToast("Failed to save the PDF on this device. Open this file in Chrome/Safari and try again.", "error");
@@ -2301,16 +2307,7 @@ async function downloadWorksheetPDF(){
   const filename = `FDT_${worksheetFilename(wsLog)}_${stamp}.pdf`;
   try{
     const blob = doc.output("blob");
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = filename;
-    a.rel = "noopener";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    setTimeout(()=>URL.revokeObjectURL(url), 2000);
-    showToast(`Downloaded: ${filename} — check your Downloads folder or device notifications.`, "ok");
+    await triggerDownload(blob, filename, "application/pdf");
   }catch(err){
     showToast("Failed to save the PDF on this device. Open this file in Chrome/Safari and try again.", "error");
   }
@@ -2442,21 +2439,7 @@ async function shareBackup(){
   const json = JSON.stringify(data, null, 2);
   const stamp = new Date().toISOString().slice(0,10);
   const filename = `FDT_Backup_${stamp}.json`;
-
-  try{
-    if(navigator.share && navigator.canShare){
-      const file = new File([json], filename, {type:"application/json"});
-      if(navigator.canShare({files:[file]})){
-        await navigator.share({files:[file], title:"FDT Calculator Backup"});
-        showToast("Backup shared. Choose Google Drive, Gmail, or another app to save it.", "ok");
-        return;
-      }
-    }
-  }catch(err){
-    if(err && err.name === "AbortError") return; // fundi ameghairi share sheet mwenyewe
-    console.warn("navigator.share failed, falling back to download:", err);
-  }
-  triggerDownload(json, filename, "application/json;charset=utf-8;");
+  await triggerDownload(json, filename, "application/json;charset=utf-8;");
 }
 
 function restoreBackupFile(inputEl){
