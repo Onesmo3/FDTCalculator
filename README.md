@@ -99,12 +99,10 @@ On supported browsers:
 
 Clone the repository:
 
-```bash
 git clone https://github.com/Onesmo3/FDTCalculator.git
 
 ### 📁 Project Structure
 
-```text
 FDTCalculator/
 ├── index.html
 ├── sw.js
@@ -113,18 +111,23 @@ FDTCalculator/
 │   └── jspdf.plugin.autotable.min.js
 └── README.md
 
-🔒 Data & Privacy
+### 🔒 Data & Privacy
+
 FDT Calculator is designed primarily as a client-side application.
 User-entered project information and saved test results are stored locally on the user's device rather than being uploaded to a central database.
-⚠️ Disclaimer
+
+### ⚠️ Disclaimer
+
 FDT Calculator is a calculation and field documentation tool.
 Users are responsible for verifying input data, calculation results, applicable specifications, and acceptance criteria before using results for engineering decisions or official project documentation.
 The application does not replace applicable standards, project specifications, engineering judgment, or QA/QC procedures.
-📌 Project Status
+
+### 📌 Project Status
+
 FDT Calculator is actively being improved with a focus on:
-Reliability
-Offline field use
-Calculation validation
-PDF reporting
-Data protection
-Mobile usability
+- Reliability
+- Offline field use
+- Calculation validation
+- PDF reporting
+- Data protection
+- Mobile usability
