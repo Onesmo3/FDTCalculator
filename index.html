@@ -453,25 +453,22 @@ button.ripple::after{
 }
 .tabs{
   display:flex;
-  gap:6px;
+  gap:8px;
   margin-bottom:14px;
 }
 .tab-btn{
   flex:1;
-  padding:8px 4px;
+  padding:10px;
   border:1.5px solid var(--border);
   border-radius:var(--radius-sm);
   background:#fff;
   color:var(--ink-soft);
   font-family:'IBM Plex Mono',monospace;
   font-weight:600;
-  font-size:10px;
-  letter-spacing:.01em;
+  font-size:12px;
+  letter-spacing:.03em;
   text-transform:uppercase;
   cursor:pointer;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
 }
 .tab-btn.active{
   background:var(--field);
@@ -607,19 +604,13 @@ textarea:focus{
   <button class="gear-btn" onclick="openSettings()" title="Settings">⚙</button>
 </div>
 
-<div class="tabs" style="margin-bottom:14px;">
-  <button class="tab-btn active" id="modeBtnSingle" onclick="switchMode('single')" style="font-size:12px;padding:10px 4px;">Single Point</button>
-  <button class="tab-btn" id="modeBtnWorksheet" onclick="switchMode('worksheet')" style="font-size:12px;padding:10px 4px;">Full Worksheet</button>
-</div>
-
-<div id="singleMode">
 <div class="cards">
 
 <!-- LOCATION & DATE -->
 <div class="card">
 <div class="card-head"><span class="sec-no">§1</span><h3>Location &amp; Date</h3></div>
 <div class="grid-2x3">
-<div><label>Road Name (Optional)</label><input id="roadName" type="text" placeholder="e.g. Mbeya - Chunya Road"></div>
+<div><label>Road Name</label><input id="roadName" type="text" placeholder="e.g. Mbeya - Chunya Road"></div>
 <div><label>Date of Test</label><input id="testDate" type="date"></div>
 <div><label>Chainage From</label><input id="chFrom" type="text" placeholder="e.g. 0+000"></div>
 <div><label>Chainage To</label><input id="chTo" type="text" placeholder="e.g. 0+500"></div>
@@ -715,84 +706,6 @@ textarea:focus{
 </div>
 
 </div>
-<!-- /singleMode -->
-
-<div id="worksheetMode" style="display:none;">
-
-<div class="card">
-<div class="card-head"><span class="sec-no">§WS</span><h3>Worksheet Header</h3></div>
-<div class="grid-2x3">
-<div><label>Location</label><input id="wsLocation" type="text" placeholder="e.g. Km 0+575 - Km 0+700 F.W"></div>
-<div>
-  <label>Layer</label>
-  <input id="wsLayer" list="layerOptions" oninput="calcWorksheet()" placeholder="Select or input layer type">
-</div>
-<div><label>Material Source</label><input id="wsMaterialSource" type="text"></div>
-<div><label>Road (Optional)</label><input id="wsRoad" type="text" placeholder="e.g. Nyerere Road"></div>
-<div><label>Technician</label><input id="wsTechnician" type="text"></div>
-<div><label>Checked By</label><input id="wsCheckedBy" type="text"></div>
-<div><label>Test Date</label><input id="wsTestDate" type="date"></div>
-<div><label>RFI No</label><input id="wsRfiNo" type="text"></div>
-<div><label>Max Dry Density Ref No</label><input id="wsMddRefNo" type="text"></div>
-<div><label>Sand Calibration Ref No</label><input id="wsSandCalibRefNo" type="text"></div>
-<div><label>Maximum Dry Density (g/cm³)</label><input id="wsMdd" type="number" step="0.001" oninput="calcWorksheet()"></div>
-<div><label>Density of Sand (g/cm³)</label><input id="wsSandDensity" type="number" step="0.001" oninput="calcWorksheet()"></div>
-<div><label>Optimum Moisture Content (%)</label><input id="wsOmc" type="number" step="0.1" oninput="calcWorksheet()"></div>
-<div><label>Max Layer Thickness (mm)</label><input id="wsMaxLayerThickness" type="number"></div>
-<div><label>Depth Below Formation (mm)</label><input id="wsDepthBelowFormation" type="number"></div>
-</div>
-<label style="margin-top:10px;">Remarks</label>
-<textarea id="wsRemarks" rows="2" placeholder="Optional remarks"></textarea>
-</div>
-
-<div class="card">
-<div class="card-head"><span class="sec-no">§WS</span><h3>Test Holes</h3></div>
-<div class="log-actions">
-  <button class="small-btn" onclick="addHole()">+ Add Hole</button>
-  <button class="small-btn" onclick="removeHole()">− Remove Last Hole</button>
-</div>
-<div style="overflow-x:auto;">
-<table class="row-table" id="wsHolesTable" style="min-width:600px;"></table>
-</div>
-</div>
-
-<div class="card">
-<div class="card-head"><span class="sec-no">§WS</span><h3>Test Results</h3></div>
-<div class="grid-2x3">
-<div><label>Number of Tests, n</label><input id="wsN" readonly></div>
-<div><label>Average Compaction, Xn (%)</label><input id="wsXn" readonly></div>
-<div><label>Required Average, Xs (%)</label><input id="wsXs" readonly></div>
-<div><label>Minimum Single Value, Xo (%)</label><input id="wsXo" readonly></div>
-<div><label>Required Minimum, Xmin (%)</label><input id="wsXminDisplay" readonly></div>
-<div>
-<label>Status</label>
-<div id="wsStatusBox" class="status-box neutral"><span id="wsStatusIcon">Awaiting data</span></div>
-</div>
-</div>
-</div>
-
-<button class="main-btn" id="wsCalcBtn" onclick="calcWorksheet()">Calculate Worksheet</button>
-
-<div class="log-card">
-  <div class="log-head"><span class="sec-no">Log</span><h3>Saved Worksheets <span id="wsLogCount">0</span></h3></div>
-  <div class="log-actions">
-    <button class="small-btn" onclick="saveWorksheetToLog()">+ Save Worksheet</button>
-    <button class="small-btn dl-btn" onclick="downloadWorksheetCSV()">⬇ Download CSV</button>
-    <button class="small-btn dl-btn" onclick="downloadWorksheetPDF()">🖨 Download PDF</button>
-    <button class="small-btn clear-btn" onclick="clearWorksheetLog()">Clear Log</button>
-  </div>
-  <table class="row-table log-table" id="wsLogTable">
-    <thead><tr><th>#</th><th>Location</th><th>Layer</th><th>Xn %</th><th>Status</th><th></th></tr></thead>
-    <tbody id="wsLogTableBody"></tbody>
-  </table>
-  <div class="log-empty" id="wsLogEmptyMsg">No saved worksheets yet. Calculate first, then tap "+ Save Worksheet".</div>
-</div>
-
-</div>
-<!-- /worksheetMode -->
-
-</div>
-<!-- /.container -->
 
 <!-- SETTINGS MODAL -->
 <div class="overlay" id="settingsOverlay">
@@ -802,7 +715,6 @@ textarea:focus{
       <button class="tab-btn active" id="tabBtnProj" onclick="switchTab('proj')">Project Info</button>
       <button class="tab-btn" id="tabBtnCyl" onclick="switchTab('cyl')">Cylinders</button>
       <button class="tab-btn" id="tabBtnLayer" onclick="switchTab('layer')">Compaction %</button>
-      <button class="tab-btn" id="tabBtnAbout" onclick="switchTab('about')">About</button>
     </div>
 
     <!-- PROJECT INFO TAB (letterhead ya PDF) -->
@@ -826,7 +738,7 @@ textarea:focus{
           <input type="file" accept="image/*" onchange="handleLogoUpload(this,'companyLogo','compLogoPreview','compLogoBox')">
           <div class="logo-preview-box" id="compLogoBox" style="display:none;">
             <img id="compLogoPreview">
-            <button class="logo-remove" onclick="removeLogo('companyLogo','compLogoPreview','compLogoBox')">✕ Remove</button>
+            <button class="logo-remove" onclick="removeLogo('companyLogo','compLogoPreview','compLogoBox')">✕ Ondoa</button>
           </div>
         </div>
         <div>
@@ -834,7 +746,7 @@ textarea:focus{
           <input type="file" accept="image/*" onchange="handleLogoUpload(this,'consultantLogo','consLogoPreview','consLogoBox')">
           <div class="logo-preview-box" id="consLogoBox" style="display:none;">
             <img id="consLogoPreview">
-            <button class="logo-remove" onclick="removeLogo('consultantLogo','consLogoPreview','consLogoBox')">✕ Remove</button>
+            <button class="logo-remove" onclick="removeLogo('consultantLogo','consLogoPreview','consLogoBox')">✕ Ondoa</button>
           </div>
         </div>
       </div>
@@ -852,77 +764,12 @@ textarea:focus{
 
     <!-- LAYERS TAB -->
     <div class="tab-panel" id="tabLayer">
-      <div class="hint">Layer Type — Required Average (Xs) na Minimum Single Value (Xmin) kwa Test No. 3, 5, 6, 7, 8, 9+</div>
-      <div class="hint" style="font-weight:700; color:var(--field);">Xs (Required Average)</div>
+      <div class="hint">Layer Type &amp; Required Compaction (%) for Test No. 3, 5, 6, 7, 8, 9+</div>
       <table class="row-table" id="layerTable">
         <thead><tr><th>Layer</th><th>#3</th><th>#5</th><th>#6</th><th>#7</th><th>#8</th><th>#9</th><th></th></tr></thead>
         <tbody id="layerTableBody"></tbody>
       </table>
-      <div class="hint" style="font-weight:700; color:var(--field); margin-top:10px;">Xmin (Minimum Single Value)</div>
-      <table class="row-table" id="layerXminTable">
-        <thead><tr><th>Layer</th><th>#3</th><th>#5</th><th>#6</th><th>#7</th><th>#8</th><th>#9</th></tr></thead>
-        <tbody id="layerXminTableBody"></tbody>
-      </table>
       <button class="small-btn" onclick="addLayerRow()">+ Add Layer</button>
-    </div>
-
-    <!-- ABOUT TAB (About Us / Privacy Policy / Copyright) -->
-    <div class="tab-panel" id="tabAbout">
-      <div style="font-family:'IBM Plex Sans',sans-serif; font-size:13px; line-height:1.6; color:var(--ink);">
-
-        <h4 style="font-family:'Oswald',sans-serif; font-size:13px; text-transform:uppercase; letter-spacing:.04em; color:var(--field); margin:0 0 6px;">About This App</h4>
-        <p style="margin:0 0 14px;">
-          FDT Calculator — Sand Cone Method is a field tool for QA/QC on road construction projects
-          (AASHTO T191 / ASTM D1556), built to help geotechnical/civil field technicians calculate
-          Field Density Test results quickly and accurately, directly on site — with no internet
-          connection required. The app stores your settings (cylinders, layers, project info) and
-          test results directly on your device.
-        </p>
-        <p style="margin:0 0 18px; font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--ink-faint);">
-          Version: 1.0.0
-        </p>
-
-        <h4 style="font-family:'Oswald',sans-serif; font-size:13px; text-transform:uppercase; letter-spacing:.04em; color:var(--field); margin:0 0 6px;">Privacy Policy</h4>
-        <ul style="margin:0 0 18px; padding-left:18px;">
-          <li style="margin-bottom:6px;"><strong>No server:</strong> All data — settings, project info, logos, and test results (Test Log) — is stored ONLY on your device. Nothing is sent over the internet or to any server.</li>
-          <li style="margin-bottom:6px;"><strong>No tracking:</strong> This app has no analytics, ads, cookies, or any form of user tracking.</li>
-          <li style="margin-bottom:6px;"><strong>PDF/CSV:</strong> Reports are generated directly on your device (offline). They are never uploaded or passed through any server.</li>
-          <li style="margin-bottom:6px;"><strong>Device permissions:</strong> The app may request permission to save files (downloading PDF/CSV) and access photos (logo upload). These permissions are used solely for that purpose.</li>
-          <li style="margin-bottom:6px;"><strong>Sharing with third parties:</strong> No data is shared with any outside company or service.</li>
-          <li style="margin-bottom:0;"><strong>Deleting your data:</strong> Use "Clear Log" inside the app to delete results, or clear the app's data/cache in your phone settings to remove everything stored.</li>
-        </ul>
-
-        <h4 style="font-family:'Oswald',sans-serif; font-size:13px; text-transform:uppercase; letter-spacing:.04em; color:var(--field); margin:0 0 6px;">Copyright</h4>
-        <p style="margin:0 0 4px;">© <span id="copyrightYear"></span> FDT Calculator. All rights reserved.</p>
-        <p style="margin:0 0 4px; font-size:12px; color:var(--ink-soft);">
-          Concept and idea by Onesmo. Built with the assistance of Claude AI (Anthropic).
-        </p>
-        <p style="margin:0 0 18px; font-size:12px; color:var(--ink-soft);">
-          This app uses the following open-source libraries: jsPDF and jsPDF-AutoTable (both under
-          the MIT License).
-        </p>
-
-        <h4 style="font-family:'Oswald',sans-serif; font-size:13px; text-transform:uppercase; letter-spacing:.04em; color:var(--field); margin:0 0 6px;">Self-Test</h4>
-        <p style="margin:0 0 8px;">
-          Run a built-in check against a known real-world FDT report (Nyerere Road, G7 Layer,
-          n=4) to confirm the calculator's formulas and Table 7205/1 spec values are working
-          correctly. Useful after any settings changes or app updates.
-        </p>
-        <button class="small-btn" onclick="runSelfTest()">▶ Run Self-Test</button>
-        <div id="selfTestResults"></div>
-
-        <h4 style="font-family:'Oswald',sans-serif; font-size:13px; text-transform:uppercase; letter-spacing:.04em; color:var(--field); margin:18px 0 6px;">Backup &amp; Restore</h4>
-        <p style="margin:0 0 8px;">
-          Share a backup of all your settings and saved results (cylinders, layers, project info,
-          Single Point log, and Worksheet log) to Google Drive, email, or any app on your device.
-          Restoring a backup will replace everything currently saved on this device.
-        </p>
-        <div class="log-actions" style="margin-bottom:0;">
-          <button class="small-btn" onclick="shareBackup()">📤 Share Backup</button>
-          <button class="small-btn" onclick="document.getElementById('restoreFileInput').click()">📥 Restore from Backup</button>
-        </div>
-        <input type="file" id="restoreFileInput" accept="application/json,.json" style="display:none;" onchange="restoreBackupFile(this)">
-      </div>
     </div>
 
     <div class="modal-actions">
@@ -938,7 +785,7 @@ textarea:focus{
   <div class="modal" style="max-width:380px;">
     <p id="alertMessage" style="margin:0 0 18px;font-family:'IBM Plex Sans',sans-serif;font-size:14px;line-height:1.55;color:var(--ink);"></p>
     <div class="modal-actions">
-      <button class="btn-save" style="flex:1;" onclick="closeAlert()">OK</button>
+      <button class="btn-save" style="flex:1;" onclick="closeAlert()">SAWA</button>
     </div>
   </div>
 </div>
@@ -948,8 +795,8 @@ textarea:focus{
   <div class="modal" style="max-width:380px;">
     <p id="confirmMessage" style="margin:0 0 18px;font-family:'IBM Plex Sans',sans-serif;font-size:14px;line-height:1.55;color:var(--ink);"></p>
     <div class="modal-actions">
-      <button class="btn-close" style="flex:1;" onclick="closeConfirm(false)">Cancel</button>
-      <button class="btn-save" style="flex:1;" onclick="closeConfirm(true)">Confirm</button>
+      <button class="btn-close" style="flex:1;" onclick="closeConfirm(false)">Ghairi</button>
+      <button class="btn-save" style="flex:1;" onclick="closeConfirm(true)">Thibitisha</button>
     </div>
   </div>
 </div>
@@ -964,28 +811,28 @@ const DEFAULT_CYLINDERS = [
 ];
 const LAYER_BREAKPOINTS = [3,5,6,7,8,9];
 const DEFAULT_LAYERS = [
-  {name:"Roadbed",              vals:[100.1,100.3,100.5,100.6,100.7,100.8], xminVals:[97.1,96.9,96.8,96.7,96.6,96.5]},
-  {name:"G3",                   vals:[90.1,90.4,90.6,90.7,90.9,91.0], xminVals:[86.4,86.2,86.0,85.9,85.8,85.7]},
-  {name:"G7",                   vals:[93.2,93.6,93.8,94.0,94.2,94.3], xminVals:[87.9,87.6,87.4,87.2,87.0,86.9]},
-  {name:"Backfill",             vals:[93.2,93.6,93.8,94.0,94.2,94.3], xminVals:[87.9,87.6,87.4,87.2,87.0,86.9]},
-  {name:"G15",                  vals:[95.2,95.6,95.8,96.0,96.2,96.3], xminVals:[91.4,91.2,91.0,90.9,90.8,90.7]},
-  {name:"GW",                   vals:[95.2,95.6,95.8,96.0,96.2,96.3], xminVals:[91.4,91.2,91.0,90.9,90.8,90.7]},
-  {name:"G25",                  vals:[95.2,95.6,95.8,96.0,96.2,96.3], xminVals:[91.4,91.2,91.0,90.9,90.8,90.7]},
-  {name:"G45",                  vals:[95.2,95.6,95.8,96.0,96.2,96.3], xminVals:[91.4,91.2,91.0,90.9,90.8,90.7]},
-  {name:"CM",                   vals:[95.2,95.6,95.8,96.0,96.2,96.3], xminVals:[91.4,91.2,91.0,90.9,90.8,90.7]},
-  {name:"C1-Subbase",           vals:[95.2,95.6,95.8,96.0,96.2,96.3], xminVals:[91.4,91.2,91.0,90.9,90.8,90.7]},
-  {name:"C1-Base",              vals:[97.1,97.4,97.6,97.7,97.9,98.0], xminVals:[93.4,93.2,93.0,92.9,92.8,92.7]},
-  {name:"C2",                   vals:[97.1,97.4,97.6,97.7,97.9,98.0], xminVals:[93.4,93.2,93.0,92.9,92.8,92.7]},
-  {name:"G60",                  vals:[98.1,98.4,98.6,98.7,98.9,99.0], xminVals:[94.4,94.2,94.0,93.9,93.8,93.7]},
-  {name:"G80",                  vals:[98.1,98.4,98.6,98.7,98.9,99.0], xminVals:[94.4,94.2,94.0,93.9,93.8,93.7]},
-  {name:"CRS",                  vals:[100.1,100.3,100.5,100.6,100.7,100.8], xminVals:[97.1,96.9,96.8,96.7,96.6,96.5]},
-  {name:"CRR-88 (Aggregate Apparent Density)", vals:[88.4,88.6,88.7,88.8,88.9,89.0], xminVals:[85.6,85.5,85.3,85.2,85.1,85.0]},
-  {name:"CRR-104 (BS-Heavy alt)",              vals:[104.1,104.4,104.6,104.7,104.9,105.0], xminVals:[100.4,100.2,100.0,99.9,99.8,99.7]},
-  {name:"AC20",                 vals:[96.1,96.3,96.5,96.6,96.7,96.8], xminVals:[93.0,92.9,92.8,92.7,92.6,92.5]},
-  {name:"AC14",                 vals:[96.1,96.3,96.5,96.6,96.7,96.8], xminVals:[93.0,92.9,92.8,92.7,92.6,92.5]},
-  {name:"AC10",                 vals:[96.1,96.3,96.5,96.6,96.7,96.8], xminVals:[93.0,92.9,92.8,92.7,92.6,92.5]},
-  {name:"BEMIX",                vals:[96.1,96.3,96.5,96.6,96.7,96.8], xminVals:[93.0,92.9,92.8,92.7,92.6,92.5]},
-  {name:"FBMIX",                vals:[96.1,96.3,96.5,96.6,96.7,96.8], xminVals:[93.0,92.9,92.8,92.7,92.6,92.5]}
+  {name:"Roadbed",              vals:[100.1,100.3,100.5,100.6,100.7,100.8]},
+  {name:"G3",                   vals:[90.1,90.4,90.6,90.7,90.9,91.0]},
+  {name:"G7",                   vals:[93.2,93.6,93.8,94.0,94.2,94.3]},
+  {name:"Backfill",             vals:[93.2,93.6,93.8,94.0,94.2,94.3]},
+  {name:"G15",                  vals:[95.2,95.6,95.8,96.0,96.2,96.3]},
+  {name:"GW",                   vals:[95.2,95.6,95.8,96.0,96.2,96.3]},
+  {name:"G25",                  vals:[95.2,95.6,95.8,96.0,96.2,96.3]},
+  {name:"G45",                  vals:[95.2,95.6,95.8,96.0,96.2,96.3]},
+  {name:"CM",                   vals:[95.2,95.6,95.8,96.0,96.2,96.3]},
+  {name:"C1-Subbase",           vals:[95.2,95.6,95.8,96.0,96.2,96.3]},
+  {name:"C1-Base",              vals:[97.1,97.4,97.6,97.7,97.9,98.0]},
+  {name:"C2",                   vals:[97.1,97.4,97.6,97.7,97.9,98.0]},
+  {name:"G60",                  vals:[98.1,98.4,98.6,98.7,98.9,99.0]},
+  {name:"G80",                  vals:[98.1,98.4,98.6,98.7,98.9,99.0]},
+  {name:"CRS",                  vals:[100.1,100.3,100.5,100.6,100.7,100.8]},
+  {name:"CRR-88 (Aggregate Apparent Density)", vals:[88.4,88.6,88.7,88.8,88.9,89.0]},
+  {name:"CRR-104 (BS-Heavy alt)",              vals:[104.1,104.4,104.6,104.7,104.9,105.0]},
+  {name:"AC20",                 vals:[96.1,96.3,96.5,96.6,96.7,96.8]},
+  {name:"AC14",                 vals:[96.1,96.3,96.5,96.6,96.7,96.8]},
+  {name:"AC10",                 vals:[96.1,96.3,96.5,96.6,96.7,96.8]},
+  {name:"BEMIX",                vals:[96.1,96.3,96.5,96.6,96.7,96.8]},
+  {name:"FBMIX",                vals:[96.1,96.3,96.5,96.6,96.7,96.8]}
 ];
 
 let cylinders = [];
@@ -1007,42 +854,6 @@ function loadSettings(){
     layers = JSON.parse(JSON.stringify(DEFAULT_LAYERS));
     projectInfo = {projectName:"", companyName:"", companyLogo:null, consultantName:"", consultantLogo:null};
   }
-  /* MIGRATION: layers zilizohifadhiwa kabla ya feature ya Xmin (Table 7205/1)
-     kuongezwa hazina field ya "xminVals" kabisa (au zina "xmin" ya toleo la
-     kati - namba moja tu) - jaza kwa kulinganisha jina na DEFAULT_LAYERS,
-     ili Xmin ionekane kwenye calculation na PDF bila fundi kulazimika
-     kuingia Settings kuiweka mwenyewe. */
-  let migrated = false;
-  layers.forEach(row=>{
-    if(!row.xminVals){
-      const def = DEFAULT_LAYERS.find(d=>d.name.trim().toLowerCase()===row.name.trim().toLowerCase());
-      if(def){
-        row.xminVals = def.xminVals.slice();
-      } else if(row.xmin!=null){
-        row.xminVals = [row.xmin,row.xmin,row.xmin,row.xmin,row.xmin,row.xmin];
-      } else {
-        row.xminVals = [0,0,0,0,0,0];
-      }
-      delete row.xmin;
-      migrated = true;
-    }
-  });
-  if(migrated) persist();
-
-  /* MIGRATION 2 (one-time): xminVals ya toleo lililopita (fdt-v13/14/15/16)
-     zilikuwa placeholder (namba moja ikirudiwa mara 6) kwa layers zote isipokuwa
-     Roadbed. Sasa tuna Table 7205/1 kamili (breakpoints 6 sahihi kwa kila
-     layer) - refresh moja tu (version-gated) kwa layers zinazofanana jina na
-     DEFAULT_LAYERS, bila kugusa layers za custom alizozitengeneza fundi mwenyewe. */
-  const XMIN_DATA_VERSION = "3";
-  if(localStorage.getItem("fdt_xminVersion") !== XMIN_DATA_VERSION){
-    layers.forEach(row=>{
-      const def = DEFAULT_LAYERS.find(d=>d.name.trim().toLowerCase()===row.name.trim().toLowerCase());
-      if(def) row.xminVals = def.xminVals.slice();
-    });
-    localStorage.setItem("fdt_xminVersion", XMIN_DATA_VERSION);
-    persist();
-  }
   renderLayerOptions();
 }
 
@@ -1061,7 +872,7 @@ function handleLogoUpload(inputEl, key, previewId, boxId){
   const file = inputEl.files && inputEl.files[0];
   if(!file) return;
   if(file.size > 4000000){
-    showToast("Logo is too large (over 4MB). Please use a smaller image.", "error");
+    showToast("Logo kubwa mno (zaidi ya 4MB). Tumia picha ndogo zaidi.", "error");
     inputEl.value = "";
     return;
   }
@@ -1113,7 +924,7 @@ function handleLogoUpload(inputEl, key, previewId, boxId){
       try{
         imgDataUrl = canvas.toDataURL("image/jpeg", 0.95);
       }catch(err){
-        showToast("Failed to process this image. Try a different PNG or JPG.", "error");
+        showToast("Imeshindikana kuchakata picha hii. Jaribu PNG au JPG nyingine.", "error");
         return;
       }
       projectInfo[key] = {data: imgDataUrl, w: w, h: h};
@@ -1123,7 +934,7 @@ function handleLogoUpload(inputEl, key, previewId, boxId){
       box.style.display = "flex";
     };
     img.onerror = function(){
-      showToast("Failed to read this image. Try a different PNG or JPG.", "error");
+      showToast("Imeshindikana kusoma picha hii. Jaribu PNG au JPG nyingine.", "error");
     };
     img.src = rawDataUrl;
   };
@@ -1172,11 +983,9 @@ function switchTab(tab){
   document.getElementById("tabProj").classList.toggle("active", tab==="proj");
   document.getElementById("tabCyl").classList.toggle("active", tab==="cyl");
   document.getElementById("tabLayer").classList.toggle("active", tab==="layer");
-  document.getElementById("tabAbout").classList.toggle("active", tab==="about");
   document.getElementById("tabBtnProj").classList.toggle("active", tab==="proj");
   document.getElementById("tabBtnCyl").classList.toggle("active", tab==="cyl");
   document.getElementById("tabBtnLayer").classList.toggle("active", tab==="layer");
-  document.getElementById("tabBtnAbout").classList.toggle("active", tab==="about");
 }
 
 function renderCylTable(){
@@ -1203,12 +1012,8 @@ function addCylRow(){
 
 function renderLayerTable(){
   const body = document.getElementById("layerTableBody");
-  const xminBody = document.getElementById("layerXminTableBody");
   body.innerHTML = "";
-  xminBody.innerHTML = "";
   layers.forEach((row,i)=>{
-    if(!row.xminVals) row.xminVals = [0,0,0,0,0,0];
-
     const tr = document.createElement("tr");
     let valCells = row.vals.map((v,j)=>`<td><input type="number" step="0.1" value="${v}" onchange="updateLayerVal(${i},${j},this.value)"></td>`).join("");
     tr.innerHTML = `
@@ -1217,19 +1022,13 @@ function renderLayerTable(){
       <td><button class="del-row" onclick="removeLayer(${i})">✕</button></td>
     `;
     body.appendChild(tr);
-
-    const xtr = document.createElement("tr");
-    let xminCells = row.xminVals.map((v,j)=>`<td><input type="number" step="0.1" value="${v}" onchange="updateLayerXminVal(${i},${j},this.value)"></td>`).join("");
-    xtr.innerHTML = `<td style="font-family:'IBM Plex Mono',monospace; font-size:12px;">${row.name}</td>${xminCells}`;
-    xminBody.appendChild(xtr);
   });
 }
 function updateLayerName(i,val){ layers[i].name = val; }
 function updateLayerVal(i,j,val){ layers[i].vals[j] = +val; }
-function updateLayerXminVal(i,j,val){ layers[i].xminVals[j] = +val; }
 function removeLayer(i){ layers.splice(i,1); renderLayerTable(); }
 function addLayerRow(){
-  layers.push({name:"New Layer", vals:[0,0,0,0,0,0], xminVals:[0,0,0,0,0,0]});
+  layers.push({name:"New Layer", vals:[0,0,0,0,0,0]});
   renderLayerTable();
 }
 
@@ -1239,7 +1038,7 @@ function saveSettings(){
   closeSettings();
 }
 function resetDefaults(){
-  showConfirm("Are you sure you want to reset to default settings? Your changes will be lost.", function(){
+  showConfirm("Una uhakika unataka kurudisha settings za default? Mabadiliko yako yatafutika.", function(){
     cylinders = JSON.parse(JSON.stringify(DEFAULT_CYLINDERS));
     layers = JSON.parse(JSON.stringify(DEFAULT_LAYERS));
     persist();
@@ -1270,7 +1069,7 @@ function persistLog(){
 
 function saveToLog(){
   if(compaction.value === ""){
-    showAlert("Tap 'Calculate' first before saving results.");
+    showAlert("Bonyeza 'Calculate' kwanza kabla ya kuhifadhi matokeo.");
     return;
   }
   testLog.push({
@@ -1323,7 +1122,7 @@ function removeLogEntry(i){
 
 function clearLog(){
   if(testLog.length===0) return;
-  showConfirm("Delete all saved results in the log? This action cannot be undone.", function(){
+  showConfirm("Futa matokeo yote yaliyohifadhiwa kwenye log? Hatua hii haiwezi kurudishwa.", function(){
     testLog = [];
     persistLog();
     renderLogTable();
@@ -1396,20 +1195,6 @@ function groupFilename(groups){
   return namePart;
 }
 
-/* Jina la faili kwa Full Worksheet PDF/CSV - inatumia Location (na Road ikiwepo)
-   ya worksheet, sawa na groupFilename() inavyofanya kwa Single Point mode. */
-function worksheetFilename(entries){
-  let namePart = "Worksheet";
-  if(entries.length === 1){
-    const e = entries[0];
-    const safe = s => (s||"").toString().trim().replace(/[^a-zA-Z0-9+]+/g,"_");
-    const locPart = e.location ? safe(e.location) : "";
-    const roadPart = e.road ? "_" + safe(e.road) : "";
-    namePart = `${locPart || "Worksheet"}${roadPart}`;
-  }
-  return namePart;
-}
-
 /* ================= CUSTOM ALERT / CONFIRM (badala ya alert()/confirm() ya kivinjari) ================= */
 function showAlert(msg){
   document.getElementById("alertMessage").textContent = msg;
@@ -1445,34 +1230,16 @@ function showToast(msg, type){
 
 /* Njia ya kupakua inayofanya kazi kwenye vivinjari/mazingira mengi zaidi ya simu */
 async function triggerDownload(content, filename, mime){
-  const blob = (content instanceof Blob) ? content : new Blob([content], {type:mime});
+  const blob = new Blob([content], {type:mime});
 
-  /* Tunajaribu navigator.share() KWANZA. Sababu: baadhi ya WebView wrapper
-     apps (mf. AIDE Web-to-App) zinatumia Android DownloadListener kwa blob:
-     URLs, ambayo HAISOMI jina la faili kutoka <a download> attribute -
-     badala yake inabahatisha jina kutoka kwenye blob URL yenyewe (UUID ya
-     random), ikitoa majina ya "mchanganyiko wa herufi na namba". navigator.
-     share() inapitisha jina kama sehemu ya File metadata halisi, ikipita
-     tatizo hilo kabisa.
-     TAHADHARI (historia ya project hii): WebView za zamani (WebIntoApp)
-     zilikuwa na bug inayoharibu binary data (PDF/picha) kupitia share
-     bridge yao. Kama utaona PDF zikiharibika/kutofunguka baada ya update
-     hii kwenye APK ya AIDE, tuambie MARA MOJA ili turudi kwenye blob+anchor
-     pekee (fallback hapa chini). */
-  try{
-    if(navigator.share && navigator.canShare){
-      const file = new File([blob], filename, {type:mime});
-      if(navigator.canShare({files:[file]})){
-        await navigator.share({files:[file]});
-        showToast(`Shared: ${filename}`, "ok");
-        return;
-      }
-    }
-  }catch(err){
-    if(err && err.name === "AbortError") return; // mtumiaji ameghairi share sheet mwenyewe
-    console.warn("navigator.share failed, falling back to direct download:", err);
-  }
-
+  /* MUHIMU: HATUTUMII navigator.share() hapa kwa MAKUSUDI. Uchunguzi wa kina
+     umeonyesha kuwa baadhi ya WebView (mf. zile za WebIntoApp) zina "polyfill"
+     yao ya ndani ya navigator.share() inayopitisha faili kwenda kwa native
+     Android kupitia "bridge" inayochakata data kama maandishi ya UTF-8 - hii
+     huharibu binary data (kama picha za JPEG) kwa kubadilisha bytes zisizo za
+     kawaida kuwa "U+FFFD" replacement character. Blob + anchor download
+     hapa chini haitumii bridge yoyote ya native - inabaki ndani ya WebView
+     wenyewe, kwa hiyo ni salama zaidi. */
   try{
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -1483,20 +1250,20 @@ async function triggerDownload(content, filename, mime){
     a.click();
     document.body.removeChild(a);
     setTimeout(()=>URL.revokeObjectURL(url), 2000);
-    showToast(`Downloaded: ${filename} — check your Downloads folder or device notifications.`, "ok");
+    showToast(`Imepakuliwa: ${filename} — angalia folder ya Downloads au arifa (notification) za kifaa chako.`, "ok");
   }catch(err){
     /* Fallback kwa vivinjari/webview zisizoruhusu Blob download: fungua kwenye tab mpya */
     const dataUri = "data:" + mime + "," + encodeURIComponent(content);
     const win = window.open(dataUri, "_blank");
     if(!win){
-      showToast("Your browser blocked the download. Open this file directly in Chrome/Safari.", "error");
+      showToast("Kivinjari kimezuia upakuaji. Fungua faili hili moja kwa moja kwenye Chrome/Safari.", "error");
     }
   }
 }
 
 function downloadCSV(){
   if(testLog.length === 0){
-    showAlert("No saved results yet. Tap 'Calculate' then '+ Save Result' first.");
+    showAlert("Hakuna matokeo yaliyohifadhiwa. Bonyeza 'Calculate' kisha '+ Save Result' kwanza.");
     return;
   }
   const headers = ["Point No","Date","Test Point Chainage","Point Side","Cylinder No","Spec Test No","Layer","MDD","OMC (%)","Soil from Hole","Initial Sand","Final Sand","Sand Density","Sand in Hole","Volume","Wet Density","Dry Density","Compaction (%)","Required (%)","Status"];
@@ -1525,15 +1292,6 @@ function downloadCSV(){
 
   const stamp = new Date().toISOString().slice(0,10);
   triggerDownload(csv, `FDT_${groupFilename(groups)}_${stamp}.csv`, "text/csv;charset=utf-8;");
-}
-
-/* Tengeneza random password salama (offline, haihitaji intaneti) kwa ajili
-   ya kuzuia mtu asihariri PDF (ownerPassword ya jsPDF encryption). */
-function generateRandomPassword(len = 10){
-  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789";
-  const arr = new Uint32Array(len);
-  crypto.getRandomValues(arr);
-  return Array.from(arr, n => chars[n % chars.length]).join("");
 }
 
 /* ================= LETTERHEAD (Logo + Jina la Mradi/Mkandarasi/Mshauri) ================= */
@@ -1579,8 +1337,7 @@ function logoDrawDims(logoObj, maxW, maxH){
 }
 
 /* Inarudisha y mpya (chini ya letterhead) baada ya kuchora logo, jina la mradi, na majina ya company/consultant */
-async function drawLetterhead(doc, marginX, pageWidth, reportTitle){
-  reportTitle = reportTitle || "FIELD DENSITY TEST REPORT";
+async function drawLetterhead(doc, marginX, pageWidth){
   const info = projectInfo || {};
   const maxLogoW = 85, maxLogoH = 42;
   let y = 34;
@@ -1644,7 +1401,7 @@ async function drawLetterhead(doc, marginX, pageWidth, reportTitle){
 
   doc.setFont("helvetica","bold");
   doc.setFontSize(13);
-  doc.text(reportTitle, centerX, y, {align:"center"});
+  doc.text("FIELD DENSITY TEST REPORT - Sand Cone Method", centerX, y, {align:"center"});
   y += 10;
   doc.setLineWidth(0.5);
   doc.line(marginX, y, pageWidth - marginX, y);
@@ -1657,25 +1414,16 @@ async function drawLetterhead(doc, marginX, pageWidth, reportTitle){
 /* ================= PDF REPORT (via Print) ================= */
 async function downloadPDF(){
   if(testLog.length === 0){
-    showAlert("No saved results yet. Tap 'Calculate' then '+ Save Result' first.");
+    showAlert("Hakuna matokeo yaliyohifadhiwa. Bonyeza 'Calculate' kisha '+ Save Result' kwanza.");
     return;
   }
   if(!window.jspdf || !window.jspdf.jsPDF){
-    showToast("The PDF library hasn't loaded yet (requires internet the first time). Make sure you're online, then try again in a few seconds.", "error");
+    showToast("Maktaba ya PDF haijapakiwa bado (inahitaji mtandao). Hakikisha una intaneti kisha jaribu tena baada ya sekunde chache.", "error");
     return;
   }
 
   const { jsPDF } = window.jspdf;
-  const ownerPwd = generateRandomPassword(10);
-  const doc = new jsPDF({
-    unit:"pt",
-    format:"a4",
-    encryption:{
-      userPassword:"",              // wazi kufungua/kusoma - hakuna password inayohitajika
-      ownerPassword: ownerPwd,      // password ya nasibu inayohitajika ili kuhariri
-      userPermissions:["print","copy"]  // ruhusu print & copy, sio modify/annot-forms
-    }
-  });
+  const doc = new jsPDF({unit:"pt", format:"a4"});
   const groups = buildGroups();
   const marginX = 36;
   const pageWidth = doc.internal.pageSize.getWidth();
@@ -1750,16 +1498,27 @@ async function downloadPDF(){
   const stamp = new Date().toISOString().slice(0,10);
   const filename = `FDT_${groupFilename(groups)}_${stamp}.pdf`;
 
-  /* Kupakua kunapitia triggerDownload() - inajaribu navigator.share() kwanza
-     (jina sahihi la faili hata kwenye WebView wrapper apps), kisha inarudi
-     kwenye blob+anchor kama share haipatikani. Angalia maelezo kamili
-     kwenye function ya triggerDownload() hapo juu. */
+  /* MUHIMU: HATUTUMII navigator.share() hapa kwa MAKUSUDI - ndiyo chanzo
+     halisi cha logo/picha kuharibika (corruption) kilichogunduliwa: baadhi ya
+     WebView (mf. WebIntoApp) zina "polyfill" ya ndani ya navigator.share()
+     inayopitisha faili kupitia "bridge" ya native inayochakata data kama
+     maandishi ya UTF-8, na hivyo kuharibu binary bytes za picha zilizomo
+     ndani ya PDF. Blob + anchor download hapa chini haitumii bridge yoyote
+     ya native - inabaki ndani ya WebView wenyewe, salama zaidi. */
   try{
     const blob = doc.output("blob");
-    await triggerDownload(blob, filename, "application/pdf");
-    showAlert(`PDF downloaded: ${filename}\n\nThis PDF is protected against editing. The password to edit it (owner password) is:\n\n${ownerPwd}\n\nSave this if you'll need to edit the PDF later — without this password, others can only read/print it, not edit it.`);
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    a.rel = "noopener";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(()=>URL.revokeObjectURL(url), 2000);
+    showToast(`Imepakuliwa: ${filename} — angalia folder ya Downloads au arifa (notification) za kifaa chako.`, "ok");
   }catch(err){
-    showToast("Failed to save the PDF on this device. Open this file in Chrome/Safari and try again.", "error");
+    showToast("Imeshindikana kuhifadhi PDF kwenye kifaa hiki. Fungua faili hili kwenye Chrome/Safari kisha jaribu tena.", "error");
   }
 }
 
@@ -1800,23 +1559,23 @@ function calculate(){
  ];
  for(const f of requiredFields){
    if(f.el.value === "" || isNaN(+f.el.value)){
-     showAlert(`Fill in the "${f.label}" field before tapping Calculate.`);
+     showAlert(`Jaza sehemu ya "${f.label}" kabla ya kubonyeza Calculate.`);
      return;
    }
  }
  if(+sandDensity.value <= 0){
-   showAlert('Density of Sand must be greater than zero.');
+   showAlert('Density of Sand lazima iwe zaidi ya sifuri.');
    return;
  }
  if(+mdd.value <= 0){
-   showAlert('MDD must be greater than zero.');
+   showAlert('MDD lazima iwe zaidi ya sifuri.');
    return;
  }
 
  // 2) Hesabu za msingi (Sand Cone Method)
  let sandHoleVal=+initialSand.value-+finalSand.value-+sandCone.value;
  if(sandHoleVal <= 0){
-   showAlert('The "Sand in Hole" calculation (Initial - Final - Sand in Cone) returned a negative or zero value. Please recheck the Initial Sand, Final Sand, and Cylinder Number values you entered.');
+   showAlert('Hesabu ya "Sand in Hole" (Initial - Final - Sand in Cone) imetoa thamani hasi au sifuri. Angalia tena namba za Initial Sand, Final Sand na Cylinder Number ulizoingiza.');
    return;
  }
  let vol=sandHoleVal/(+sandDensity.value);
@@ -1854,668 +1613,70 @@ btn.addEventListener("click",e=>{
  btn.classList.add("ripple");
 });
 
-/* ================= FULL WORKSHEET MODE ================= */
-function switchMode(mode){
-  document.getElementById("singleMode").style.display = mode==="single" ? "" : "none";
-  document.getElementById("worksheetMode").style.display = mode==="worksheet" ? "" : "none";
-  document.getElementById("modeBtnSingle").classList.toggle("active", mode==="single");
-  document.getElementById("modeBtnWorksheet").classList.toggle("active", mode==="worksheet");
-}
-
-let wsHoles = [];
-let wsLog = [];
-
-const WS_ROWS = [
-  {key:"chainage", label:"Chainage", type:"text"},
-  {key:"offset", label:"Offset/Side (m)", type:"text"},
-  {key:"depth", label:"Depth (mm)", type:"number"},
-  {key:"cylinder", label:"Cylinder No", type:"number", cyl:true},
-  {key:"cylWeight", label:"Weight of Cylinder (g)", type:"readonly"},
-  {key:"A", label:"A: Weight of Soil From Hole (g)", type:"number"},
-  {key:"B", label:"B: Initial Sand in Cylinder (g)", type:"number"},
-  {key:"C", label:"C: Final Sand in Cylinder (g)", type:"number"},
-  {key:"D", label:"D: Sand in Cone (g)", type:"readonly"},
-  {key:"E", label:"E: Sand in Hole, B-C-D (g)", type:"readonly"},
-  {key:"F", label:"F: Density of Sand (g/cm³)", type:"readonly"},
-  {key:"G", label:"G: Volume of Hole, E/F (cm³)", type:"readonly"},
-  {key:"H", label:"H: Wet Density, A/G (g/cm³)", type:"readonly"},
-  {key:"I", label:"I: Container No", type:"text"},
-  {key:"J", label:"J: Container+Wet Soil (g)", type:"number"},
-  {key:"K", label:"K: Container+Dry Soil (g)", type:"number"},
-  {key:"L", label:"L: Weight of Container (g)", type:"number"},
-  {key:"M", label:"M: Weight of Water, J-K (g)", type:"readonly"},
-  {key:"N", label:"N: Weight of Dry Soil, K-L (g)", type:"readonly"},
-  {key:"O", label:"O: Moisture Content, M*100/N (%)", type:"readonly"},
-  {key:"U", label:"U: Moisture Tolerance (±2%)", type:"readonly"},
-  {key:"P", label:"P: Dry Density, H*100/(O+100)", type:"readonly"},
-  {key:"Q", label:"Q: MDD (Proctor)", type:"readonly"},
-  {key:"R", label:"R: OMC (Proctor)", type:"readonly"},
-  {key:"S", label:"S: Compaction, P*100/Q (%)", type:"readonly"}
-];
-
-function newHole(){
-  return {chainage:"", offset:"", depth:"", cylinder:"", A:"", B:"", C:"", I:"", J:"", K:"", L:""};
-}
-function addHole(){
-  wsHoles.push(newHole());
-  renderHolesTable();
-}
-function removeHole(){
-  if(wsHoles.length <= 1) return;
-  wsHoles.pop();
-  renderHolesTable();
-}
-function updateHoleField(i, key, val){
-  wsHoles[i][key] = val;
-}
-
-function renderHolesTable(){
-  const table = document.getElementById("wsHolesTable");
-  let head = `<thead><tr><th>Parameter</th>`;
-  wsHoles.forEach((h,i)=> head += `<th>Hole ${i+1}</th>`);
-  head += `</tr></thead>`;
-  let body = "<tbody>";
-  WS_ROWS.forEach(row=>{
-    body += `<tr><td style="white-space:nowrap;font-size:10.5px;color:var(--ink-soft);">${row.label}</td>`;
-    wsHoles.forEach((h,i)=>{
-      if(row.type==="readonly"){
-        body += `<td><span id="wsCell_${row.key}_${i}" style="font-family:'IBM Plex Mono',monospace;font-size:12px;">-</span></td>`;
-      } else {
-        const type = row.type==="number" ? "number" : "text";
-        const val = (h[row.key] ?? "");
-        const extra = row.cyl
-          ? `onchange="updateHoleField(${i},'${row.key}',this.value); calcWorksheet();"`
-          : `onchange="updateHoleField(${i},'${row.key}',this.value)"`;
-        body += `<td><input type="${type}" value="${val}" style="width:80px;" ${extra}></td>`;
-      }
-    });
-    body += `</tr>`;
-  });
-  body += "</tbody>";
-  table.innerHTML = head + body;
-}
-
-function setCell(id, val){
-  const el = document.getElementById(id);
-  if(el) el.textContent = val;
-}
-
-/* Formula halisi za per-hole (E,G,H,M,N,O,U,P,S) - function moja inayotumiwa
-   na computeWorksheetResults() (calculator halisi) NA runSelfTest() (jaribio
-   la kuthibitisha usahihi), ili zisiweze kutofautiana kimakosa. */
-function calcHoleFormulas(h, D, cylW, sandDensity, mdd, omc){
-  const A = +h.A || 0, B = +h.B || 0, C = +h.C || 0;
-  const E = B - C - D;
-  const F = sandDensity;
-  const G = F>0 ? E/F : 0;
-  const H = G>0 ? A/G : 0;
-  const J = +h.J || 0, K = +h.K || 0, L = +h.L || 0;
-  const M = J - K;
-  const N = K - L;
-  const O = N>0 ? (M*100/N) : 0;
-  const U = (omc>0 && N>0) ? (Math.abs(O-omc)<=2 ? "OK" : "NOT OK") : "-";
-  const P = H>0 ? (H*100/(100+O)) : 0;
-  const S = (mdd>0 && P>0) ? (P*100/mdd) : 0;
-  return {cylW, D, E, F, G, H, M, N, O, U, P, Q:mdd, R:omc, S};
-}
-
-/* Hesabu kuu ya worksheet - inatumika na calcWorksheet() (UI) na save/PDF/CSV
-   (kila mmoja anaita function hii moja ili kuepuka mahesabu kutofautiana). */
-function computeWorksheetResults(){
-  const sandDensity = +wsSandDensity.value || 0;
-  const mdd = +wsMdd.value || 0;
-  const omc = +wsOmc.value || 0;
-
-  const holesComputed = wsHoles.map(h=>{
-    const cylRow = cylinders.find(c=>c.n===+h.cylinder);
-    const D = cylRow ? cylRow.s : 0;
-    const cylW = cylRow ? cylRow.w : "";
-    const calc = calcHoleFormulas(h, D, cylW, sandDensity, mdd, omc);
-    const valid = !!(cylRow && h.A!=="" && h.B!=="" && h.C!=="" && h.J!=="" && h.K!=="" && h.L!=="");
-    return {...h, ...calc, valid};
-  });
-
-  const compValues = holesComputed.filter(h=>h.valid).map(h=>h.S);
-  const n = wsHoles.length;
-  let Xn = "", Xo = "";
-  if(compValues.length){
-    Xn = compValues.reduce((a,b)=>a+b,0)/compValues.length;
-    Xo = Math.min(...compValues);
-  }
-
-  let Xs = "";
-  const layerName = (wsLayer.value||"").trim().toLowerCase();
-  const match = layers.find(row=>row.name.trim().toLowerCase()===layerName);
-  if(match) Xs = lookup(n, LAYER_BREAKPOINTS, match.vals);
-
-  const Xmin = (match && match.xminVals) ? (lookup(n, LAYER_BREAKPOINTS, match.xminVals) || null) : null;
-
-  let status = "Awaiting data";
-  if(compValues.length>0){
-    if(Xs === ""){
-      status = "No Requirement Yet";
-    } else {
-      const passAvg = Xn >= +Xs;
-      const passMin = Xmin===null ? true : Xo >= Xmin;
-      status = (passAvg && passMin) ? "Passed" : "Failed";
-    }
-  }
-
-  return {holesComputed, n, Xn, Xo, Xs, Xmin, status};
-}
-
-function calcWorksheet(){
-  const r = computeWorksheetResults();
-
-  r.holesComputed.forEach((h,i)=>{
-    setCell(`wsCell_cylWeight_${i}`, h.cylW!=="" ? h.cylW : "-");
-    setCell(`wsCell_D_${i}`, h.cylW!=="" ? h.D : "-");
-    setCell(`wsCell_E_${i}`, h.cylW!=="" ? h.E.toFixed(2) : "-");
-    setCell(`wsCell_F_${i}`, h.F ? h.F.toFixed(3) : "-");
-    setCell(`wsCell_G_${i}`, h.G ? h.G.toFixed(2) : "-");
-    setCell(`wsCell_H_${i}`, h.H ? h.H.toFixed(3) : "-");
-    setCell(`wsCell_M_${i}`, (h.J!=="" && h.K!=="") ? h.M.toFixed(2) : "-");
-    setCell(`wsCell_N_${i}`, (h.K!=="" && h.L!=="") ? h.N.toFixed(2) : "-");
-    setCell(`wsCell_O_${i}`, h.O ? h.O.toFixed(2) : "-");
-    setCell(`wsCell_U_${i}`, h.U);
-    setCell(`wsCell_P_${i}`, h.P ? h.P.toFixed(3) : "-");
-    setCell(`wsCell_Q_${i}`, h.Q ? h.Q.toFixed(3) : "-");
-    setCell(`wsCell_R_${i}`, h.R ? h.R.toFixed(1) : "-");
-    setCell(`wsCell_S_${i}`, h.S ? h.S.toFixed(2) : "-");
-  });
-
-  wsN.value = r.n;
-  wsXn.value = r.Xn!=="" ? (+r.Xn).toFixed(2) : "";
-  wsXo.value = r.Xo!=="" ? (+r.Xo).toFixed(2) : "";
-  wsXs.value = r.Xs || "";
-  wsXminDisplay.value = r.Xmin ?? "";
-
-  if(r.status==="Awaiting data"){
-    wsStatusBox.className="status-box neutral"; wsStatusIcon.textContent="Awaiting data";
-  } else if(r.status==="No Requirement Yet"){
-    wsStatusBox.className="status-box neutral"; wsStatusIcon.textContent="No Requirement Yet";
-  } else if(r.status==="Passed"){
-    wsStatusBox.className="status-box pass"; wsStatusIcon.textContent="Passed";
-  } else {
-    wsStatusBox.className="status-box fail"; wsStatusIcon.textContent="Failed";
-  }
-}
-
-/* ===== SAVE / LOG kwa Worksheet ===== */
-function loadWorksheetLog(){
-  try{
-    const l = localStorage.getItem("fdt_worksheetLog");
-    wsLog = l ? JSON.parse(l) : [];
-  }catch(e){ wsLog = []; }
-  renderWsLogTable();
-}
-function persistWorksheetLog(){
-  localStorage.setItem("fdt_worksheetLog", JSON.stringify(wsLog));
-}
-function saveWorksheetToLog(){
-  const r = computeWorksheetResults();
-  if(r.n===0 || r.Xn===""){
-    showAlert("Tap 'Calculate Worksheet' first before saving (make sure all holes have A, B, C, J, K, L and Cylinder filled in).");
-    return;
-  }
-  wsLog.push({
-    location: wsLocation.value||"", layer: wsLayer.value||"", materialSource: wsMaterialSource.value||"",
-    road: wsRoad.value||"", technician: wsTechnician.value||"", checkedBy: wsCheckedBy.value||"",
-    testDate: wsTestDate.value||"", rfiNo: wsRfiNo.value||"", mddRefNo: wsMddRefNo.value||"",
-    sandCalibRefNo: wsSandCalibRefNo.value||"", maxLayerThickness: wsMaxLayerThickness.value||"",
-    depthBelowFormation: wsDepthBelowFormation.value||"", remarks: wsRemarks.value||"",
-    holes: JSON.parse(JSON.stringify(wsHoles)),
-    result: r
-  });
-  persistWorksheetLog();
-  renderWsLogTable();
-  showToast("Worksheet saved to the log.", "ok");
-}
-function removeWorksheetLogEntry(i){
-  wsLog.splice(i,1);
-  persistWorksheetLog();
-  renderWsLogTable();
-}
-function clearWorksheetLog(){
-  if(wsLog.length===0) return;
-  showConfirm("Delete all saved worksheets in the log? This action cannot be undone.", function(){
-    wsLog = [];
-    persistWorksheetLog();
-    renderWsLogTable();
-  });
-}
-function renderWsLogTable(){
-  const countEl = document.getElementById("wsLogCount");
-  const body = document.getElementById("wsLogTableBody");
-  const table = document.getElementById("wsLogTable");
-  const emptyMsg = document.getElementById("wsLogEmptyMsg");
-  if(countEl) countEl.textContent = wsLog.length;
-  if(!body) return;
-  if(wsLog.length===0){
-    table.style.display="none"; emptyMsg.style.display="block"; body.innerHTML=""; return;
-  }
-  table.style.display="table"; emptyMsg.style.display="none";
-  body.innerHTML = wsLog.map((e,i)=>`
-    <tr>
-      <td>${i+1}</td>
-      <td>${e.location || "-"}</td>
-      <td>${e.layer || "-"}</td>
-      <td>${e.result.Xn!=="" ? (+e.result.Xn).toFixed(2) : "-"}</td>
-      <td class="${e.result.status==='Passed' ? 'log-pass' : (e.result.status==='Failed' ? 'log-fail':'')}">${e.result.status || "-"}</td>
-      <td><button class="del-row" onclick="removeWorksheetLogEntry(${i})">✕</button></td>
-    </tr>
-  `).join("");
-}
-
-function wsFmt(v,d){ return (typeof v === "number" && isFinite(v)) ? v.toFixed(d) : (v || "-"); }
-
-/* ===== CSV Export kwa Worksheet ===== */
-function downloadWorksheetCSV(){
-  if(wsLog.length===0){
-    showAlert("No saved worksheets yet. Tap 'Calculate Worksheet' then '+ Save Worksheet' first.");
-    return;
-  }
-  const headers = ["Hole","Chainage","Offset/Side","Depth(mm)","Cylinder","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O(%)","U","P","Q","R","S(Comp%)"];
-  let csv = "";
-  wsLog.forEach((entry,ei)=>{
-    const title = [entry.location, entry.road].filter(Boolean).join(" - ") || `Worksheet ${ei+1}`;
-    csv += csvEscape(`FIELD DENSITY TEST WORKSHEET - ${title}`) + "\n";
-    csv += csvEscape(`Layer: ${entry.layer||"-"} | Material Source: ${entry.materialSource||"-"} | Technician: ${entry.technician||"-"} | Checked By: ${entry.checkedBy||"-"} | Date: ${entry.testDate||"-"} | RFI No: ${entry.rfiNo||"-"}`) + "\n";
-    csv += headers.map(csvEscape).join(",") + "\n";
-    entry.result.holesComputed.forEach((h,i)=>{
-      csv += [i+1,h.chainage,h.offset,h.depth,h.cylinder,h.A,h.B,h.C,h.D,wsFmt(h.E,2),h.F,wsFmt(h.G,2),wsFmt(h.H,3),h.I,h.J,h.K,h.L,wsFmt(h.M,2),wsFmt(h.N,2),wsFmt(h.O,2),h.U,wsFmt(h.P,3),h.Q,h.R,wsFmt(h.S,2)].map(csvEscape).join(",") + "\n";
-    });
-    const r = entry.result;
-    csv += csvEscape(`n: ${r.n} | Xn (Average): ${wsFmt(r.Xn,2)}% | Xs (Required Avg): ${r.Xs||"-"}% | Xo (Min Single): ${wsFmt(r.Xo,2)}% | Xmin (Required Min): ${r.Xmin ?? "-"}% | Status: ${r.status}`) + "\n";
-    if(entry.remarks) csv += csvEscape(`Remarks: ${entry.remarks}`) + "\n";
-    if(ei < wsLog.length-1) csv += "\n";
-  });
-  const stamp = new Date().toISOString().slice(0,10);
-  triggerDownload(csv, `FDT_${worksheetFilename(wsLog)}_${stamp}.csv`, "text/csv;charset=utf-8;");
-}
-
-/* ===== PDF Export kwa Worksheet (landscape, holes kama columns) ===== */
-async function downloadWorksheetPDF(){
-  if(wsLog.length===0){
-    showAlert("No saved worksheets yet. Tap 'Calculate Worksheet' then '+ Save Worksheet' first.");
-    return;
-  }
-  if(!window.jspdf || !window.jspdf.jsPDF){
-    showToast("The PDF library hasn't loaded yet (requires internet the first time). Try again in a few seconds.", "error");
-    return;
-  }
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF({unit:"pt", format:"a4"}); // portrait - kama PDF ya mfano
-  const marginX = 30;
-  const pageWidth = doc.internal.pageSize.getWidth();
-  const pageHeight = doc.internal.pageSize.getHeight();
-  let y = await drawLetterhead(doc, marginX, pageWidth, "FIELD DENSITY TEST BY SAND REPLACEMENT METHOD");
-
-  wsLog.forEach((entry, ei)=>{
-    if(ei>0){ doc.addPage(); y = 34; }
-
-    const r = entry.result;
-    const holes = r.holesComputed;
-    const n = holes.length;
-    const first = holes[0] || {};
-
-    /* ===== 1) HEADER INFO (Location/Technician, Layer/Checked By, Material/Date, Road/RFI) ===== */
-    doc.autoTable({
-      startY: y,
-      margin:{left:marginX, right:marginX},
-      theme:"grid",
-      styles:{fontSize:7, cellPadding:2.5, lineColor:[180,180,180], lineWidth:0.5},
-      columnStyles:{0:{fontStyle:"bold", cellWidth:95},1:{cellWidth:190},2:{fontStyle:"bold", cellWidth:95},3:{cellWidth:"auto"}},
-      body:[
-        ["LOCATION:", entry.location||"-", "TECHNICIAN:", entry.technician||"-"],
-        ["LAYER:", entry.layer||"-", "CHECKED BY:", entry.checkedBy||"-"],
-        ["MATERIAL SOURCE:", entry.materialSource||"-", "TEST DATE:", entry.testDate||"-"],
-        ["ROAD:", entry.road||"-", "RFI No:", entry.rfiNo||"-"]
-      ]
-    });
-    y = doc.lastAutoTable.finalY + 6;
-
-    /* ===== 2) REFERENCE STANDARD LINE ===== */
-    doc.setFont("helvetica","bold");
-    doc.setFontSize(7.5);
-    doc.text("Ref. BS1377 : Part 9 : 1990 & CML 1.9 : 2000", pageWidth/2, y, {align:"center"});
-    y += 8;
-
-    /* ===== 3) REFERENCE NUMBERS / MDD / SAND DENSITY / OMC / LAYER INFO ===== */
-    doc.autoTable({
-      startY: y,
-      margin:{left:marginX, right:marginX},
-      theme:"grid",
-      styles:{fontSize:7, cellPadding:2.5, lineColor:[180,180,180], lineWidth:0.5},
-      columnStyles:{0:{fontStyle:"bold", cellWidth:190},1:{cellWidth:100},2:{fontStyle:"bold", cellWidth:190},3:{cellWidth:"auto"}},
-      body:[
-        ["Maximum dry density reference No:", entry.mddRefNo||"-", "Sand Calibration Reference No", entry.sandCalibRefNo||"-"],
-        ["Maximum dry density (g/cm³)", wsFmt(first.Q,3), "Density of sand (g/cm³)", wsFmt(first.F,3)],
-        ["Optimum Moisture Content (%)", wsFmt(first.R,1), "Max. Layer Thickness (mm)", entry.maxLayerThickness||"-"],
-        ["Depth below formation level (mm)", entry.depthBelowFormation||"-", "Layer Type", entry.layer||"-"]
-      ]
-    });
-    y = doc.lastAutoTable.finalY + 4;
-
-    doc.setFont("helvetica","bold");
-    doc.setFontSize(7.5);
-    doc.text("After Compaction", marginX, y);
-    y += 8;
-
-    /* ===== 4) BULK DENSITY / MOISTURE / DRY DENSITY DETERMINATION (holes = columns) ===== */
-    const holeCols = holes.map((h,i)=>String(i+1));
-    const sectionRow = (label)=>[{content:label, colSpan: 3+n, styles:{halign:"center", fontStyle:"bold", fillColor:[230,230,224]}}];
-    const dataRow = (code, label, unit, fn)=>[
-      {content:code, styles:{fontStyle:"bold"}}, label, unit,
-      ...holes.map(fn)
-    ];
-
-    const body = [
-      sectionRow("BULK DENSITY DETERMINATION"),
-      ["", "Hole No", "", ...holeCols],
-      ["", "Chainage", "", ...holes.map(h=>h.chainage||"-")],
-      ["", "Offset/Side (m)", "", ...holes.map(h=>h.offset||"-")],
-      ["", "Depth (mm)", "", ...holes.map(h=>h.depth||"-")],
-      ["", "Cylinder", "No.", ...holes.map(h=>h.cylinder||"-")],
-      ["", "Weight of Cylinder", "g", ...holes.map(h=>h.cylW!==""?h.cylW:"-")],
-      dataRow("A","Weight of Soil From Hole","g", h=>h.A||"-"),
-      dataRow("B","Initial Sand in Cylinder","g", h=>h.B||"-"),
-      dataRow("C","Final Sand in Cylinder","g", h=>h.C||"-"),
-      dataRow("D","Sand in Cone","g", h=>h.cylW!==""?h.D:"-"),
-      dataRow("E","Wt of Sand in Hole (B-C-D)","g", h=>h.cylW!==""?wsFmt(h.E,2):"-"),
-      dataRow("F","Density of Sand (calibrated)","g/cm³", h=>wsFmt(h.F,3)),
-      dataRow("G","Volume of Hole (E/F)","cm³", h=>wsFmt(h.G,2)),
-      dataRow("H","Wet Density (A/G)","g/cm³", h=>wsFmt(h.H,3)),
-      sectionRow("MOISTURE CONTENT DETERMINATION"),
-      dataRow("I","Container No","No.", h=>h.I||"-"),
-      dataRow("J","Container + Wet Soil","g", h=>h.J||"-"),
-      dataRow("K","Container + Dry Soil","g", h=>h.K||"-"),
-      dataRow("L","Weight of Container","g", h=>h.L||"-"),
-      dataRow("M","Weight of Water (J-K)","g", h=>wsFmt(h.M,2)),
-      dataRow("N","Weight of Dry Soil (K-L)","g", h=>wsFmt(h.N,2)),
-      dataRow("O","Moisture Content (M*100/N)","%", h=>wsFmt(h.O,2)),
-      dataRow("U","Moisture Tolerance (±2.0%)","%", h=>h.U),
-      sectionRow("DRY DENSITY DETERMINATION"),
-      dataRow("P","Dry Density (H*100/(O+100))","g/cm³", h=>wsFmt(h.P,3)),
-      dataRow("Q","M.D.D. (PROCTOR)","g/cm³", h=>wsFmt(h.Q,3)),
-      dataRow("R","O.M.C. (PROCTOR)","%", h=>wsFmt(h.R,1)),
-      dataRow("S","COMPACTION (P*100/Q)","%", h=>wsFmt(h.S,2)),
-      ["T", {content:"AVERAGE COMPACTION, Xn", styles:{fontStyle:"bold"}}, "%",
-        {content: r.Xn!=="" ? wsFmt(r.Xn,1)+"%" : "-", colSpan:n, styles:{halign:"center", fontStyle:"bold"}}]
-    ];
-
-    doc.autoTable({
-      startY: y,
-      margin:{left:marginX, right:marginX},
-      theme:"grid",
-      styles:{fontSize:6, cellPadding:1.6, lineColor:[180,180,180], lineWidth:0.4},
-      columnStyles:{0:{cellWidth:13, halign:"center"}, 1:{cellWidth:112}, 2:{cellWidth:24}},
-      body
-    });
-    y = doc.lastAutoTable.finalY + 6;
-
-    /* ===== 5) TEST RESULTS vs SPECIFICATIONS vs REQUIREMENT ===== */
-    const passAvg = r.Xs!=="" ? (r.Xn >= +r.Xs) : null;
-    const passMin = r.Xmin!==null ? (r.Xo >= r.Xmin) : null;
-    doc.autoTable({
-      startY: y,
-      margin:{left:marginX, right:marginX},
-      theme:"grid",
-      styles:{fontSize:7, cellPadding:3, lineColor:[180,180,180], lineWidth:0.5, halign:"center"},
-      head:[["Number of tests, n", "", "Test Results", "Specifications", "Requirement", "Fail/Pass"]],
-      headStyles:{fillColor:[32,38,31], textColor:255},
-      body:[
-        [{content:n, rowSpan:2, styles:{fontStyle:"bold"}}, "Average Value, %:", wsFmt(r.Xn,1), r.Xs||"-", "Xn \u2265 Xs", passAvg===null?"-":(passAvg?"Pass":"Fail")],
-        ["Minimum Single Value, %:", wsFmt(r.Xo,1), r.Xmin ?? "-", "Xo \u2265 Xmin", passMin===null?"-":(passMin?"Pass":"Fail")]
-      ]
-    });
-    y = doc.lastAutoTable.finalY + 6;
-
-    doc.setFont("helvetica","italic");
-    doc.setFontSize(6.5);
-    doc.text("Specified Compaction Requirements as per Table 7205/1 of SSRW'2000", pageWidth/2, y, {align:"center"});
-    y += 12;
-
-    /* ===== 6) REMARKS ===== */
-    doc.setFont("helvetica","normal");
-    doc.setFontSize(7.5);
-    doc.text(`Remarks: ${entry.remarks || "................................................................................................................................"}`, marginX, y);
-    y += 14;
-
-    /* ===== 7) SIGNATURES (Name/Sign/Date left-aligned to leave writing space) ===== */
-    doc.autoTable({
-      startY: y,
-      margin:{left:marginX, right:marginX},
-      theme:"grid",
-      styles:{fontSize:7.5, cellPadding:7, lineColor:[180,180,180], lineWidth:0.5, halign:"left"},
-      head:[
-        [{content:"For Contractor", colSpan:2, styles:{halign:"center"}}, {content:"For Consultant", colSpan:2, styles:{halign:"center"}}],
-        [{content:"Checked by (MT)",styles:{halign:"center"}},{content:"Verified by (ME)",styles:{halign:"center"}},{content:"Checked by (MT)",styles:{halign:"center"}},{content:"Verified by (ME)",styles:{halign:"center"}}]
-      ],
-      headStyles:{fillColor:[245,244,236], textColor:20, fontStyle:"bold"},
-      bodyStyles:{halign:"left"},
-      body:[
-        ["Name:","Name:","Name:","Name:"],
-        ["Sign:","Sign:","Sign:","Sign:"],
-        ["Date:","Date:","Date:","Date:"]
-      ]
-    });
-    y = doc.lastAutoTable.finalY + 10;
-  });
-
-  const stamp = new Date().toISOString().slice(0,10);
-  const filename = `FDT_${worksheetFilename(wsLog)}_${stamp}.pdf`;
-  try{
-    const blob = doc.output("blob");
-    await triggerDownload(blob, filename, "application/pdf");
-  }catch(err){
-    showToast("Failed to save the PDF on this device. Open this file in Chrome/Safari and try again.", "error");
-  }
-}
-
-
-/* ================= SELF-TEST (Golden Test Case: Nyerere Road) =================
-   Jaribio la kuthibitisha formula za calculator hazijavunjika. Linatumia
-   calcHoleFormulas() ile ile halisi inayotumika kwenye Full Worksheet, na
-   data halisi ya field iliyothibitishwa dhidi ya ripoti ya PDF ya Nyerere
-   Road (Km 0+575 - Km 0+700, G7 Layer, n=4, tarehe 9/5/2024, RFI 2024-199). */
-function runSelfTest(){
-  const sandDensity = 1.302, mdd = 2.254, omc = 7.6;
-  const holes = [
-    {A:6991,   B:6000, C:1470, D:682, cylW:1717, J:353.75, K:331.35, L:25.71,
-     expE:3848, expG:2955, expH:2.365, expM:22.4,  expN:305.64, expO:7.3, expU:"OK", expP:2.204, expS:97.8},
-    {A:6872,   B:6000, C:1463, D:677, cylW:1708, J:358.16, K:337.45, L:27.53,
-     expE:3860, expG:2965, expH:2.318, expM:20.71, expN:309.92, expO:6.7, expU:"OK", expP:2.173, expS:96.4},
-    {A:6908,   B:6000, C:1376, D:677, cylW:1708, J:400.25, K:376.31, L:26.43,
-     expE:3947, expG:3031, expH:2.279, expM:23.94, expN:349.88, expO:6.8, expU:"OK", expP:2.133, expS:94.6},
-    {A:6886.0, B:6000, C:1381, D:682, cylW:1717, J:309.72, K:291.5,  L:25.73,
-     expE:3937, expG:3024, expH:2.277, expM:18.22, expN:265.77, expO:6.9, expU:"OK", expP:2.131, expS:94.6}
-  ];
-
-  const rows = [];
-  const compValues = [];
-  let allPass = true;
-
-  holes.forEach((h,i)=>{
-    const c = calcHoleFormulas(h, h.D, h.cylW, sandDensity, mdd, omc);
-    compValues.push(c.S);
-    const checks = [
-      ["E (Sand in Hole)", c.E, h.expE, 0.5],
-      ["G (Volume)", c.G, h.expG, 1],
-      ["H (Wet Density)", c.H, h.expH, 0.001],
-      ["M (Wt of Water)", c.M, h.expM, 0.01],
-      ["N (Wt of Dry Soil)", c.N, h.expN, 0.01],
-      ["O (Moisture %)", c.O, h.expO, 0.05],
-      ["P (Dry Density)", c.P, h.expP, 0.001],
-      ["S (Compaction %)", c.S, h.expS, 0.05]
-    ];
-    checks.forEach(([label,actual,expected,tol])=>{
-      const pass = Math.abs(actual-expected) <= tol;
-      if(!pass) allPass = false;
-      rows.push({hole:i+1, label, actual: (+actual).toFixed(3), expected, pass});
-    });
-    const uPass = c.U === h.expU;
-    if(!uPass) allPass = false;
-    rows.push({hole:i+1, label:"U (Moisture Tolerance)", actual:c.U, expected:h.expU, pass:uPass});
-  });
-
-  const Xn = compValues.reduce((a,b)=>a+b,0)/compValues.length;
-  const Xo = Math.min(...compValues);
-  const xnPass = Math.abs(Xn-95.8)<=0.05;
-  const xoPass = Math.abs(Xo-94.6)<=0.05;
-  if(!xnPass) allPass = false;
-  if(!xoPass) allPass = false;
-
-  /* Angalia pia Table 7205/1 lookup (Xs, Xmin) kwa G7, n=4 - hii inategemea
-     Settings->Compaction% ya sasa, hivyo ikitofautiana huenda ni kwa sababu
-     layer imebadilishwa na fundi mwenyewe, sio lazima bug. */
-  let xsCheck = null, xminCheck = null;
-  const match = layers.find(row=>row.name.trim().toLowerCase()==="g7");
-  if(match){
-    const xs = lookup(4, LAYER_BREAKPOINTS, match.vals);
-    const xmin = lookup(4, LAYER_BREAKPOINTS, match.xminVals || []);
-    xsCheck = {actual:xs, expected:93.2, pass: Math.abs((+xs||0)-93.2)<=0.05};
-    xminCheck = {actual:xmin, expected:87.9, pass: Math.abs((+xmin||0)-87.9)<=0.05};
-  }
-
-  renderSelfTestResults(rows, Xn, Xo, xnPass, xoPass, xsCheck, xminCheck, allPass);
-}
-
-function renderSelfTestResults(rows, Xn, Xo, xnPass, xoPass, xsCheck, xminCheck, allPass){
-  const el = document.getElementById("selfTestResults");
-  if(!el) return;
-  const fails = rows.filter(r=>!r.pass);
-
-  let html = `<div style="padding:12px; border-radius:10px; background:${allPass?'var(--pass-bg)':'var(--fail-bg)'}; border:1.5px solid ${allPass?'var(--pass)':'var(--fail)'}; margin-top:10px;">`;
-  html += `<div style="font-weight:700; font-family:'Oswald',sans-serif; color:${allPass?'var(--pass)':'var(--fail)'}; margin-bottom:8px;">`;
-  html += allPass ? "✅ All checks passed — the calculator's formulas are working correctly."
-                   : `⚠️ ${fails.length} check(s) failed — see details below.`;
-  html += `</div>`;
-
-  html += `<div style="font-family:'IBM Plex Mono',monospace; font-size:11px; line-height:1.7;">`;
-  html += `Xn (Average Compaction): ${Xn.toFixed(2)}% — expected 95.8% ${xnPass?'✓':'✗'}<br>`;
-  html += `Xo (Minimum Single Value): ${Xo.toFixed(2)}% — expected 94.6% ${xoPass?'✓':'✗'}<br>`;
-  if(xsCheck){
-    html += `Xs (Required Avg, G7 n=4): ${xsCheck.actual}% — expected 93.2% ${xsCheck.pass?'✓':'✗'}<br>`;
-    html += `Xmin (Required Min, G7 n=4): ${xminCheck.actual}% — expected 87.9% ${xminCheck.pass?'✓':'✗'}`;
-  } else {
-    html += `Xs/Xmin check skipped — "G7" layer not found in Settings (may have been renamed).`;
-  }
-  html += `</div>`;
-
-  if(fails.length){
-    html += `<div style="margin-top:10px; padding-top:8px; border-top:1px dashed var(--border); font-family:'IBM Plex Mono',monospace; font-size:10.5px; line-height:1.8;">`;
-    fails.forEach(f=>{
-      html += `Hole ${f.hole} — ${f.label}: got ${f.actual}, expected ${f.expected}<br>`;
-    });
-    html += `</div>`;
-  }
-  html += `</div>`;
-  el.innerHTML = html;
-}
-
-/* ================= BACKUP & RESTORE =================
-   Backup ni JSON yenye settings zote (cylinders, layers, projectInfo) na
-   log zote (Single Point + Worksheet). "Share" inatumia navigator.share()
-   ya kifaa (share sheet) ili fundi achague Google Drive, Gmail, WhatsApp,
-   n.k. Hii ni salama kutumika (tofauti na tatizo la awali la logo images
-   kwenye WebView ya zamani) kwa sababu backup hii ni JSON/text safi, sio
-   binary data - bug ile ilikuwa inaathiri picha pekee zinazopitishwa
-   kwenye "bridge" inayodhani kila kitu ni UTF-8 text. Kama share
-   haipatikani kabisa kwenye kifaa, tunarudi kwenye download ya kawaida
-   (blob + anchor) ili fundi apakie Drive mwenyewe baadaye. */
-function buildBackupData(){
-  return {
-    fdtBackup: true,
-    version: 1,
-    exportedAt: new Date().toISOString(),
-    cylinders, layers, projectInfo, testLog,
-    worksheetLog: wsLog
-  };
-}
-
-async function shareBackup(){
-  const data = buildBackupData();
-  const json = JSON.stringify(data, null, 2);
-  const stamp = new Date().toISOString().slice(0,10);
-  const filename = `FDT_Backup_${stamp}.json`;
-  await triggerDownload(json, filename, "application/json;charset=utf-8;");
-}
-
-function restoreBackupFile(inputEl){
-  const file = inputEl.files && inputEl.files[0];
-  if(!file) return;
-  const reader = new FileReader();
-  reader.onload = function(e){
-    let data;
-    try{
-      data = JSON.parse(e.target.result);
-    }catch(err){
-      showAlert("This file is not a valid FDT backup (invalid JSON).");
-      inputEl.value = "";
-      return;
-    }
-    const looksValid = data && typeof data === "object" &&
-      ("cylinders" in data || "layers" in data || "testLog" in data || "worksheetLog" in data);
-    if(!looksValid){
-      showAlert("This file does not look like a valid FDT backup.");
-      inputEl.value = "";
-      return;
-    }
-    showConfirm("Restoring this backup will REPLACE all settings and saved results currently on this device. This cannot be undone. Continue?", function(){
-      if(data.cylinders) cylinders = data.cylinders;
-      if(data.layers) layers = data.layers;
-      if(data.projectInfo) projectInfo = data.projectInfo;
-      if(data.testLog) testLog = data.testLog;
-      if(data.worksheetLog) wsLog = data.worksheetLog;
-      persist();
-      persistLog();
-      persistWorksheetLog();
-      renderLayerOptions();
-      renderLogTable();
-      renderWsLogTable();
-      if(document.getElementById("settingsOverlay").classList.contains("open")){
-        renderProjectInfoForm();
-        renderCylTable();
-        renderLayerTable();
-      }
-      showToast("Backup restored successfully.", "ok");
-    });
-    inputEl.value = "";
-  };
-  reader.onerror = function(){
-    showAlert("Failed to read this file.");
-    inputEl.value = "";
-  };
-  reader.readAsText(file);
-}
-
 /* INIT */
-if(document.getElementById("copyrightYear")){
-  document.getElementById("copyrightYear").textContent = new Date().getFullYear();
-}
 loadSettings();
 loadLog();
-loadWorksheetLog();
-for(let k=0;k<4;k++) wsHoles.push(newHole());
-renderHolesTable();
 if(document.getElementById("testDate") && !testDate.value){
   testDate.value = new Date().toISOString().slice(0,10);
-}
-if(document.getElementById("wsTestDate") && !wsTestDate.value){
-  wsTestDate.value = new Date().toISOString().slice(0,10);
 }
 </script>
 
 <script>
-  /* Sajili Service Worker kwa ajili ya matumizi ya OFFLINE (baada ya kupakia
-     app mara moja ukiwa na intaneti, itaendelea kufanya kazi bila intaneti). */
+  /* Sajili Service Worker kwa ajili ya matumizi ya OFFLINE, na pia
+     kufuatilia toleo jipya la app ili kumjulisha mtumiaji (auto-update
+     notification) badala ya kubadilisha kimya kimya bila yeye kujua. */
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
-      navigator.serviceWorker.register("sw.js").catch((err) => {
+      navigator.serviceWorker.register("sw.js").then((reg) => {
+
+        // Angalia toleo jipya kila dakika 30 - muhimu kwa sababu app
+        // inaweza kubaki wazi muda mrefu wakati wa kazi ya field.
+        setInterval(() => reg.update(), 30 * 60 * 1000);
+
+        reg.addEventListener("updatefound", () => {
+          const newWorker = reg.installing;
+          if (!newWorker) return;
+          newWorker.addEventListener("statechange", () => {
+            if (newWorker.state === "installed" && navigator.serviceWorker.controller) {
+              // Toleo jipya liko tayari - haibadilishi chochote mpaka
+              // mtumiaji mwenyewe abonyeze "Sasisha Sasa".
+              showUpdateBanner(newWorker);
+            }
+          });
+        });
+
+      }).catch((err) => {
         console.warn("Service Worker registration imeshindikana:", err);
       });
+
+      // SW mpya ikishachukua nafasi (baada ya mtumiaji kubonyeza Sasisha),
+      // reload otomatiki ili apate toleo jipya kikamilifu.
+      let refreshing = false;
+      navigator.serviceWorker.addEventListener("controllerchange", () => {
+        if (refreshing) return;
+        refreshing = true;
+        window.location.reload();
+      });
     });
+  }
+
+  function showUpdateBanner(newWorker){
+    const el = document.getElementById("toast");
+    if(!el) return;
+    el.innerHTML = 'Toleo jipya la app limepatikana. '
+      + '<button id="updateNowBtn" style="margin-left:8px;background:#f5b942;'
+      + 'color:#1c2620;border:none;border-radius:6px;padding:4px 10px;'
+      + 'font-weight:700;cursor:pointer;">Sasisha Sasa</button>';
+    el.className = "toast show toast-ok";
+    el.style.pointerEvents = "auto";
+    document.getElementById("updateNowBtn").addEventListener("click", () => {
+      newWorker.postMessage({type:"SKIP_WAITING"});
+      el.classList.remove("show");
+      el.style.pointerEvents = "none";
+    });
+    // Usiifiche banner hii otomatiki (kama toast za kawaida) - lazima
+    // ibaki mpaka mtumiaji aichague, kwa sababu ni arifa muhimu.
+    if (typeof toastTimer !== "undefined") clearTimeout(toastTimer);
   }
 </script>
 </body>
