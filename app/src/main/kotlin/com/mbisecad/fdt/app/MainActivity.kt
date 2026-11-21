@@ -25,7 +25,7 @@ import java.util.Locale
 import java.util.UUID
 
 /** Real single-point FDT screen backed by the pure [com.mbisecad.fdt] engine. */
-class MainActivity : Activity() {
+class MainActivity : BaseActivity() {
     private lateinit var initialSand: EditText
     private lateinit var finalSand: EditText
     private lateinit var sandCone: EditText
@@ -114,11 +114,11 @@ class MainActivity : Activity() {
             tools2.fdtButton("Save single result", FdtButtonStyle.PRIMARY, weight = 1f) {
                 val record = lastSingleRecord
                 if (record == null) {
-                    Toast.makeText(this@MainActivity, "Calculate kwanza.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@MainActivity, "Calculate kwanza.".loc(), Toast.LENGTH_SHORT).show()
                 } else {
                     val count = RecordStore(this@MainActivity).save(record)
                     Toast.makeText(
-                        this@MainActivity, "Imehifadhiwa ($count records).", Toast.LENGTH_SHORT
+                        this@MainActivity, "Imehifadhiwa ($count records).".loc(), Toast.LENGTH_SHORT
                     ).show()
                 }
             }
@@ -244,14 +244,14 @@ class MainActivity : Activity() {
     private fun showSelfTest() {
         val t = runSelfTest(defaultLayers())
         val message = buildString {
-            appendLine("Self-test: ${if (t.allPass) "PASS" else "FAIL"}")
-            appendLine("Golden checks: ${t.rows.count { it.pass }}/${t.rows.size}")
-            appendLine("Xn: ${fmt(t.Xn, 3)} (tarajio 95.8)")
-            appendLine("Xo: ${fmt(t.Xo, 3)} (tarajio 94.6)")
-            appendLine("G7 Xs/Xmin: ${fmt(t.xsActual, 1)} / ${fmt(t.xminActual, 1)}")
+            appendLine("Self-test: ${if (t.allPass) "PASS" else "FAIL"}".loc())
+            appendLine("Golden checks: ${t.rows.count { it.pass }}/${t.rows.size}".loc())
+            appendLine("Xn: ${fmt(t.Xn, 3)} (tarajio 95.8)".loc())
+            appendLine("Xo: ${fmt(t.Xo, 3)} (tarajio 94.6)".loc())
+            appendLine("G7 Xs/Xmin: ${fmt(t.xsActual, 1)} / ${fmt(t.xminActual, 1)}".loc())
         }
         AlertDialog.Builder(this)
-            .setTitle("Engine self-test")
+            .setTitle("Engine self-test".loc())
             .setMessage(message)
             .setPositiveButton("OK", null)
             .show()
@@ -260,7 +260,7 @@ class MainActivity : Activity() {
     private fun exportPdf() {
         val record = lastSingleRecord
         if (record == null) {
-            Toast.makeText(this, "Calculate kwanza.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Calculate kwanza.".loc(), Toast.LENGTH_SHORT).show()
             return
         }
         val name = fdtPdfName("SINGLE", record.location, record.layer, "single")
@@ -277,9 +277,9 @@ class MainActivity : Activity() {
             val stream = contentResolver.openOutputStream(uri)
                 ?: throw IllegalStateException("File haiandikiki")
             stream.use { FdtPdf(ProjectStore(this).load(), it).writeSingle(listOf(record)) }
-            Toast.makeText(this, "PDF: Download/$name", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "PDF: Download/$name".loc(), Toast.LENGTH_SHORT).show()
         } catch (e: Exception) {
-            Toast.makeText(this, "PDF imeshindikana: ${e.message}", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "PDF imeshindikana: ${e.message}".loc(), Toast.LENGTH_SHORT).show()
         }
     }
 

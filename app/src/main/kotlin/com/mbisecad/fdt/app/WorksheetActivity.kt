@@ -25,7 +25,7 @@ import java.util.Locale
 import java.util.UUID
 
 /** Worksheet screen: many holes -> Xn / Xo / Xs / Xmin -> Pass/Fail. */
-class WorksheetActivity : Activity() {
+class WorksheetActivity : BaseActivity() {
     private data class HoleRow(
         val view: LinearLayout,
         val A: EditText, val B: EditText, val C: EditText, val D: EditText,
@@ -152,11 +152,11 @@ class WorksheetActivity : Activity() {
             ) {
                 val record = lastRecord
                 if (record == null) {
-                    Toast.makeText(this@WorksheetActivity, "Calculate kwanza.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@WorksheetActivity, "Calculate kwanza.".loc(), Toast.LENGTH_SHORT).show()
                 } else {
                     val count = RecordStore(this@WorksheetActivity).save(record)
                     Toast.makeText(
-                        this@WorksheetActivity, "Imehifadhiwa ($count records).", Toast.LENGTH_SHORT
+                        this@WorksheetActivity, "Imehifadhiwa ($count records).".loc(), Toast.LENGTH_SHORT
                     ).show()
                 }
             }

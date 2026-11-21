@@ -9,7 +9,7 @@ import android.widget.Toast
 import com.mbisecad.fdt.FdtRecord
 
 /** Edits metadata + hole values, then recomputes worksheet results on save. */
-class RecordEditActivity : Activity() {
+class RecordEditActivity : BaseActivity() {
     private lateinit var record: FdtRecord
     private val holeEdits = mutableListOf<HoleEdit>()
 
@@ -37,7 +37,7 @@ class RecordEditActivity : Activity() {
         super.onCreate(savedInstanceState)
         val id = intent.getStringExtra(EXTRA_ID)
         record = RecordStore(this).all().firstOrNull { it.id == id } ?: run {
-            Toast.makeText(this, "Record haipatikani.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Record haipatikani.".loc(), Toast.LENGTH_SHORT).show()
             finish()
             return
         }
@@ -84,7 +84,7 @@ class RecordEditActivity : Activity() {
         val holesCard = root.fdtCard("Holes")
         if (record.holes.isEmpty()) {
             holesCard.addView(android.widget.TextView(holesCard.context).apply {
-                text = "Single point — hakuna hole rows za kuhariri."
+                text = "Single point — hakuna hole rows za kuhariri.".loc()
                 textSize = FdtType.CAPTION
                 setTextColor(FdtColors.MUTED)
                 setPadding(dp(4), dp(8), dp(4), dp(4))
@@ -136,7 +136,7 @@ class RecordEditActivity : Activity() {
         }
         required.fdtError(null)
         if (sand <= 0 || mddValue <= 0) {
-            Toast.makeText(this, "Density of sand na MDD lazima > 0.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Density of sand na MDD lazima > 0.".loc(), Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -174,7 +174,7 @@ class RecordEditActivity : Activity() {
         }
 
         RecordStore(this).save(updated)
-        Toast.makeText(this, "Record imehaririwa.", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "Record imehaririwa.".loc(), Toast.LENGTH_SHORT).show()
         finish()
     }
 

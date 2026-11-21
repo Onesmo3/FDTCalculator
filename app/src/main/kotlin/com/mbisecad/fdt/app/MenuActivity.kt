@@ -11,7 +11,7 @@ import com.mbisecad.fdt.defaultLayers
 import com.mbisecad.fdt.runSelfTest
 
 /** Launcher: single entry point for tests, data, settings and information. */
-class MenuActivity : Activity() {
+class MenuActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -35,7 +35,7 @@ class MenuActivity : Activity() {
                 open(WorksheetActivity::class.java)
             }
             addView(TextView(context).apply {
-                text = "Single point: hole moja. Worksheet: holes nyingi → Xn/Xo/Xs/Xmin."
+                text = "Single point: hole moja. Worksheet: holes nyingi → Xn/Xo/Xs/Xmin.".loc()
                 textSize = FdtType.CAPTION
                 setTextColor(FdtColors.MUTED)
                 setPadding(dp(4), dp(8), dp(4), dp(4))
@@ -52,7 +52,7 @@ class MenuActivity : Activity() {
                 open(SettingsActivity::class.java)
             }
             addView(TextView(context).apply {
-                text = "History, backup/restore, report setup na cylinder details ziko kwenye Settings."
+                text = "History, backup/restore, report setup na cylinder details ziko kwenye Settings.".loc()
                 textSize = FdtType.CAPTION
                 setTextColor(FdtColors.MUTED)
                 setPadding(dp(4), dp(8), dp(4), dp(4))
@@ -81,7 +81,7 @@ class MenuActivity : Activity() {
         }
 
         root.addView(TextView(this).apply {
-            text = "FDT Calculator · Kotlin port · v1.0"
+            text = "FDT Calculator · Kotlin port · v1.0".loc()
             textSize = FdtType.CAPTION
             setTextColor(FdtColors.MUTED)
             setPadding(dp(12), dp(16), dp(12), dp(4))
@@ -106,24 +106,24 @@ class MenuActivity : Activity() {
         val r = runSelfTest(defaultLayers())
         val passed = r.rows.count { it.pass }
         val message = buildString {
-            appendLine(if (r.allPass) "RESULT: PASS ✅" else "RESULT: FAIL ❌")
-            appendLine("Checks: $passed / ${r.rows.size}")
+            appendLine(if (r.allPass) "RESULT: PASS ✅".loc() else "RESULT: FAIL ❌".loc())
+            appendLine("Checks: $passed / ${r.rows.size}".loc())
             appendLine()
-            appendLine("Xn ${r.Xn}  (pass: ${r.xnPass})")
-            appendLine("Xo ${r.Xo}  (pass: ${r.xoPass})")
+            appendLine("Xn ${r.Xn}  (pass: ${r.xnPass})".loc())
+            appendLine("Xo ${r.Xo}  (pass: ${r.xoPass})".loc())
             if (r.hasLayerCheck) {
-                appendLine("Xs ${r.xsActual} (${r.xsPass}) · Xmin ${r.xminActual} (${r.xminPass})")
+                appendLine("Xs ${r.xsActual} (${r.xsPass}) · Xmin ${r.xminActual} (${r.xminPass})".loc())
             }
             if (!r.allPass) {
                 appendLine()
-                appendLine("Failures:")
+                appendLine("Failures:".loc())
                 r.rows.filter { !it.pass }.take(10).forEach {
-                    appendLine("Hole ${it.hole} · ${it.label}: ${it.actual} ≠ ${it.expected}")
+                    appendLine("Hole ${it.hole} · ${it.label}: ${it.actual} ≠ ${it.expected}".loc())
                 }
             }
         }
         AlertDialog.Builder(this)
-            .setTitle("Engine self-test")
+            .setTitle("Engine self-test".loc())
             .setMessage(message)
             .setPositiveButton("OK", null)
             .show()

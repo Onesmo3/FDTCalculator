@@ -7,7 +7,7 @@ import android.widget.ScrollView
 import android.widget.TextView
 
 /** Simple read-only screen for Privacy / Disclaimer / Terms / About items. */
-class StaticInfoActivity : Activity() {
+class StaticInfoActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -22,6 +22,7 @@ class StaticInfoActivity : Activity() {
         root.fdtCard(LegalText.title(type)) {
             addView(TextView(context).apply {
                 text = LegalText.body(type)
+                tag = "fdt_no_translate"
                 textSize = FdtType.BODY
                 setTextColor(FdtColors.TEXT)
                 setLineSpacing(3f, 1.2f)

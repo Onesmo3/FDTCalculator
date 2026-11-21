@@ -20,7 +20,7 @@ import java.util.Date
 import java.util.Locale
 
 /** List of saved FDT results, with JSON backup/restore. */
-class RecordsActivity : Activity() {
+class RecordsActivity : BaseActivity() {
     private lateinit var listContainer: LinearLayout
     private val store by lazy { RecordStore(this) }
 
@@ -47,12 +47,12 @@ class RecordsActivity : Activity() {
             addView(row2)
             row2.fdtButton("Clear all", FdtButtonStyle.DANGER, weight = 1f) {
                 AlertDialog.Builder(this@RecordsActivity)
-                    .setTitle("Clear all")
-                    .setMessage("Futa records zote zilizohifadhiwa?")
+                    .setTitle("Clear all".loc())
+                    .setMessage("Futa records zote zilizohifadhiwa?".loc())
                     .setPositiveButton("Futa") { _, _ ->
                         store.clear()
                         refresh()
-                        toast("Records zimefutwa.")
+                        toast("Records zimefutwa.".loc())
                     }
                     .setNegativeButton("Cancel", null)
                     .show()
@@ -62,7 +62,7 @@ class RecordsActivity : Activity() {
         root.fdtCard("Reports") {
             fdtButton("PDF (all)", FdtButtonStyle.PRIMARY) { exportAllPdf() }
             addView(TextView(context).apply {
-                text = "Report info na logos vinawekwa kwenye Settings → Report Setup."
+                text = "Report info na logos vinawekwa kwenye Settings → Report Setup.".loc()
                 textSize = FdtType.CAPTION
                 setTextColor(FdtColors.MUTED)
                 setPadding(dp(4), dp(8), dp(4), dp(4))
@@ -86,7 +86,7 @@ class RecordsActivity : Activity() {
         val records = store.all()
         if (records.isEmpty()) {
             listContainer.addView(TextView(this).apply {
-                text = "Hakuna records bado. Fanya Calculate kisha Save result."
+                text = "Hakuna records bado. Fanya Calculate kisha Save result.".loc()
                 textSize = FdtType.BODY
                 setTextColor(FdtColors.MUTED)
                 setPadding(dp(12), dp(20), dp(12), dp(12))
@@ -100,8 +100,8 @@ class RecordsActivity : Activity() {
                 addView(TextView(context).apply {
                     text = buildString {
                         appendLine("${record.createdAt}  •  ${record.mode}")
-                        appendLine("Project: ${record.project.ifBlank { "-" }} | Site: ${record.site.ifBlank { "-" }}")
-                        append("Layer: ${record.layer.ifBlank { "-" }}")
+                        appendLine("Project: ${record.project.ifBlank { "-" }} | Site: ${record.site.ifBlank { "-" }}".loc())
+                        append("Layer: ${record.layer.ifBlank { "-" }}".loc())
                     }
                     textSize = FdtType.BODY
                     setTextColor(FdtColors.TEXT)
@@ -109,7 +109,7 @@ class RecordsActivity : Activity() {
                 })
 
                 addView(TextView(context).apply {
-                    text = "Status: ${record.status}"
+                    text = "Status: ${record.status}".loc()
                     textSize = FdtType.CAPTION
                     setTextColor(
                         when (record.status) {
@@ -153,12 +153,12 @@ class RecordsActivity : Activity() {
                     store.delete(record.id)
                     refresh()
                     AlertDialog.Builder(this@RecordsActivity)
-                        .setTitle("Record imefutwa")
-                        .setMessage("Unaweza kuirejesha kwa Undo.")
+                        .setTitle("Record imefutwa".loc())
+                        .setMessage("Unaweza kuirejesha kwa Undo.".loc())
                         .setPositiveButton("Undo") { _, _ ->
                             store.save(record)
                             refresh()
-                            toast("Record imerejeshwa.")
+                            toast("Record imerejeshwa.".loc())
                         }
                         .setNegativeButton("OK", null)
                         .show()
@@ -173,9 +173,9 @@ class RecordsActivity : Activity() {
         val raw = store.raw()
         listContainer.addView(TextView(this).apply {
             text = if (error == null) {
-                "diag: $count record(s) • stored ${raw.length} chars"
+                "diag: $count record(s) • stored ${raw.length} chars".loc()
             } else {
-                "diag ERROR: $error\nraw: ${raw.take(160)}"
+                "diag ERROR: $error\nraw: ${raw.take(160)}".loc()
             }
             textSize = FdtType.CAPTION
             setTextColor(FdtColors.MUTED)
@@ -185,35 +185,35 @@ class RecordsActivity : Activity() {
 
     private fun showDetails(record: FdtRecord) {
         val text = buildString {
-            appendLine("Mode      : ${record.mode}")
-            appendLine("Date      : ${record.testDate.ifBlank { "-" }}")
-            appendLine("Project   : ${record.project.ifBlank { "-" }}")
-            appendLine("Site      : ${record.site.ifBlank { "-" }}")
-            appendLine("Layer     : ${record.layer.ifBlank { "-" }}")
-            appendLine("Sand rho  : ${record.sandDensity}")
-            appendLine("MDD       : ${record.mdd}")
-            appendLine("OMC       : ${record.omc}")
-            appendLine("Required  : ${record.required?.let { String.format(Locale.US, "%.2f", it) } ?: "-"}")
-            appendLine("Status    : ${record.status}")
+            appendLine("Mode      : ${record.mode}".loc())
+            appendLine("Date      : ${record.testDate.ifBlank { "-" }}".loc())
+            appendLine("Project   : ${record.project.ifBlank { "-" }}".loc())
+            appendLine("Site      : ${record.site.ifBlank { "-" }}".loc())
+            appendLine("Layer     : ${record.layer.ifBlank { "-" }}".loc())
+            appendLine("Sand rho  : ${record.sandDensity}".loc())
+            appendLine("MDD       : ${record.mdd}".loc())
+            appendLine("OMC       : ${record.omc}".loc())
+            appendLine("Required  : ${record.required?.let { String.format(Locale.US, "%.2f", it) } ?: "-"}".loc())
+            appendLine("Status    : ${record.status}".loc())
             appendLine()
             if (record.mode == "WORKSHEET") {
-                appendLine("n         : ${record.holes.size}")
-                appendLine("Xn        : ${record.xn?.let { String.format(Locale.US, "%.2f", it) } ?: "-"}")
-                appendLine("Xo        : ${record.xo?.let { String.format(Locale.US, "%.2f", it) } ?: "-"}")
-                appendLine("Xs        : ${record.xs?.let { String.format(Locale.US, "%.2f", it) } ?: "-"}")
-                appendLine("Xmin      : ${record.xmin?.let { String.format(Locale.US, "%.2f", it) } ?: "-"}")
+                appendLine("n         : ${record.holes.size}".loc())
+                appendLine("Xn        : ${record.xn?.let { String.format(Locale.US, "%.2f", it) } ?: "-"}".loc())
+                appendLine("Xo        : ${record.xo?.let { String.format(Locale.US, "%.2f", it) } ?: "-"}".loc())
+                appendLine("Xs        : ${record.xs?.let { String.format(Locale.US, "%.2f", it) } ?: "-"}".loc())
+                appendLine("Xmin      : ${record.xmin?.let { String.format(Locale.US, "%.2f", it) } ?: "-"}".loc())
             } else {
-                appendLine("Compaction: ${String.format(Locale.US, "%.2f", record.compaction)} %")
+                appendLine("Compaction: ${String.format(Locale.US, "%.2f", record.compaction)} %".loc())
             }
             if (record.holes.isNotEmpty()) {
                 appendLine()
                 record.holes.forEachIndexed { i, h ->
-                    appendLine("Hole ${i + 1}: S=${h.compaction} %  U=${h.tolerance}")
+                    appendLine("Hole ${i + 1}: S=${h.compaction} %  U=${h.tolerance}".loc())
                 }
             }
         }
         AlertDialog.Builder(this)
-            .setTitle("FDT record")
+            .setTitle("FDT record".loc())
             .setMessage(text)
             .setPositiveButton("OK", null)
             .show()
@@ -230,11 +230,11 @@ class RecordsActivity : Activity() {
         }
         val uri = contentResolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values)
         if (uri == null) {
-            toast("Imeshindikana kufungua Downloads.")
+            toast("Imeshindikana kufungua Downloads.".loc())
             return
         }
         contentResolver.openOutputStream(uri)?.use { it.write(json.toByteArray(Charsets.UTF_8)) }
-        toast("Backup: Download/FDT-results-backup.json")
+        toast("Backup: Download/FDT-results-backup.json".loc())
     }
 
     private fun pickBackup() {
@@ -253,14 +253,14 @@ class RecordsActivity : Activity() {
             REQUEST_IMPORT -> try {
                 val text = contentResolver.openInputStream(uri)?.bufferedReader()?.use { it.readText() }
                 if (text == null) {
-                    toast("Faili halisomeki.")
+                    toast("Faili halisomeki.".loc())
                     return
                 }
                 val added = store.importJson(text)
                 refresh()
-                toast("Importd records: $added")
+                toast("Importd records: $added".loc())
             } catch (e: Exception) {
-                toast("Faili si sahihi: ${e.message}")
+                toast("Faili si sahihi: ${e.message}".loc())
             }
         }
     }
@@ -289,9 +289,9 @@ class RecordsActivity : Activity() {
             val stream = contentResolver.openOutputStream(uri) ?: throw IllegalStateException("File haiandikiki")
             val pdf = FdtPdf(ProjectStore(this).load(), stream)
             if (mode == "WORKSHEET") pdf.writeWorksheet(records) else pdf.writeSingle(records)
-            toast("PDF: Download/$name")
+            toast("PDF: Download/$name".loc())
         } catch (e: Exception) {
-            toast("PDF imeshindikana: ${e.message}")
+            toast("PDF imeshindikana: ${e.message}".loc())
         }
     }
 
@@ -300,7 +300,7 @@ class RecordsActivity : Activity() {
         val singles = all.filter { it.mode == "SINGLE" }
         val sheets = all.filter { it.mode == "WORKSHEET" }
         if (singles.isEmpty() && sheets.isEmpty()) {
-            toast("Hakuna records za kutengeneza PDF.")
+            toast("Hakuna records za kutengeneza PDF.".loc())
             return
         }
         if (singles.isNotEmpty()) exportPdf(singles, "single-all")

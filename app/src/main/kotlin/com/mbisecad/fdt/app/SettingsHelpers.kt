@@ -21,7 +21,7 @@ internal fun SettingsActivity.refreshCylinders() {
     cylindersContainer.removeAllViews()
     val cylinders = cylinderStore.all()
     cylindersContainer.addView(TextView(this).apply {
-        text = "Cylinders zilizopo (${cylinders.size}) — zinatumika kwenye single point na worksheet."
+        text = "Cylinders zilizopo (${cylinders.size}) — zinatumika kwenye single point na worksheet.".loc()
         textSize = FdtType.CAPTION
         setTextColor(FdtColors.MUTED)
         setPadding(dp(4), dp(2), dp(4), dp(6))
@@ -29,7 +29,7 @@ internal fun SettingsActivity.refreshCylinders() {
     cylinders.forEach { c ->
         val row = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL }
         row.addView(TextView(this).apply {
-            text = "Cyl ${c.n} · ${c.weight.toInt()} g · cone ${c.sandInCone.toInt()} g"
+            text = "Cyl ${c.n} · ${c.weight.toInt()} g · cone ${c.sandInCone.toInt()} g".loc()
             textSize = FdtType.BODY
             setTextColor(FdtColors.TEXT)
             layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 2f)
@@ -37,7 +37,7 @@ internal fun SettingsActivity.refreshCylinders() {
         row.fdtButton("Remove", FdtButtonStyle.DANGER, weight = 1f) {
             cylinderStore.remove(c.n)
             refreshCylinders()
-            toast("Cyl ${c.n} imeondolewa.")
+            toast("Cyl ${c.n} imeondolewa.".loc())
         }
         cylindersContainer.addView(row)
     }
@@ -51,11 +51,11 @@ internal fun SettingsActivity.addCylinder() {
     newWeight.fdtError(if (weight == null || weight <= 0) "Andika uzito sahihi." else null)
     newCone.fdtError(if (cone == null || cone <= 0) "Andika sand-in-cone sahihi." else null)
     if (n == null || weight == null || cone == null || n <= 0 || weight <= 0 || cone <= 0) {
-        toast("Jaza namba, uzito na sand-in-cone sahihi.")
+        toast("Jaza namba, uzito na sand-in-cone sahihi.".loc())
         return
     }
     if (!cylinderStore.add(Cylinder(n, weight, cone))) {
-        toast("Cylinder No $n ipo tayari.")
+        toast("Cylinder No $n ipo tayari.".loc())
         return
     }
     newNo.text?.clear()
@@ -63,7 +63,7 @@ internal fun SettingsActivity.addCylinder() {
     newCone.text?.clear()
     listOf(newNo, newWeight, newCone).forEach { it.fdtError(null) }
     refreshCylinders()
-    toast("Cylinder $n imeongezwa.")
+    toast("Cylinder $n imeongezwa.".loc())
 }
 
 internal fun SettingsActivity.pickLogo(which: String) {
@@ -90,12 +90,12 @@ internal fun SettingsActivity.handleImport(uri: Uri) {
     try {
         val text = contentResolver.openInputStream(uri)?.bufferedReader()?.use { it.readText() }
         if (text == null) {
-            toast("Faili halisomeki.")
+            toast("Faili halisomeki.".loc())
             return
         }
-        toast("Importd records: ${recordStore.importJson(text)}")
+        toast("Importd records: ${recordStore.importJson(text)}".loc())
     } catch (e: Exception) {
-        toast("Faili si sahihi: ${e.message}")
+        toast("Faili si sahihi: ${e.message}".loc())
     }
 }
 
@@ -105,7 +105,7 @@ internal fun SettingsActivity.handleLogo(requestCode: Int, uri: Uri) {
         REQ_LOGO_CLIENT -> ProjectStore.CLIENT
         else -> ProjectStore.CONSULTANT
     }
-    toast(if (projectStore.setLogo(which, uri)) "Logo imehifadhiwa." else "Logo imeshindikana.")
+    toast(if (projectStore.setLogo(which, uri)) "Logo imehifadhiwa.".loc() else "Logo imeshindikana.".loc())
 }
 
 internal fun SettingsActivity.exportBackup() {
@@ -118,13 +118,13 @@ internal fun SettingsActivity.exportBackup() {
     }
     val uri = contentResolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values)
     if (uri == null) {
-        toast("Imeshindikana kufungua Downloads.")
+        toast("Imeshindikana kufungua Downloads.".loc())
         return
     }
     contentResolver.openOutputStream(uri)?.use {
         it.write(recordStore.exportJson().toByteArray(Charsets.UTF_8))
     }
-    toast("Backup: Download/FDT-results-backup.json")
+    toast("Backup: Download/FDT-results-backup.json".loc())
 }
 
 internal fun SettingsActivity.toast(message: String) {

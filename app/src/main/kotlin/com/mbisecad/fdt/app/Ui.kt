@@ -64,13 +64,13 @@ fun LinearLayout.fdtHeader(title: String, subtitle: String): LinearLayout {
         background = shape(FdtColors.DARK, null, 0)
         setPadding(ctx.dp(20), ctx.dp(18), ctx.dp(20), ctx.dp(18))
         addView(TextView(ctx).apply {
-            text = title
+            text = title.loc()
             textSize = FdtType.TITLE
             setTextColor(FdtColors.ON_DARK)
             typeface = Typeface.DEFAULT_BOLD
         })
         addView(TextView(ctx).apply {
-            text = subtitle
+            text = subtitle.loc()
             textSize = FdtType.CAPTION
             setTextColor(FdtColors.ON_DARK_MUTED)
             setPadding(0, ctx.dp(2), 0, 0)
@@ -94,7 +94,7 @@ fun LinearLayout.fdtCard(title: String? = null, block: LinearLayout.() -> Unit =
         ).apply { bottomMargin = ctx.dp(12) }
         if (title != null) {
             addView(TextView(ctx).apply {
-                text = title
+                text = title.loc()
                 textSize = FdtType.SECTION
                 setTextColor(FdtColors.DARK)
                 typeface = Typeface.DEFAULT_BOLD
@@ -108,7 +108,7 @@ fun LinearLayout.fdtCard(title: String? = null, block: LinearLayout.() -> Unit =
 }
 
 fun LinearLayout.fdtLabel(text: String): TextView = TextView(context).apply {
-    this.text = text
+    this.text = text.loc()
     textSize = FdtType.LABEL
     setTextColor(FdtColors.MUTED)
     setPadding(0, context.dp(8), 0, context.dp(4))
@@ -134,7 +134,7 @@ fun EditText.fdtError(message: String?) {
         error = null
         background = shape(FdtColors.FIELD_BG, FdtColors.BORDER, context.dp(8))
     } else {
-        error = message
+        error = message.loc()
         background = shape(FdtColors.RED_LIGHT, FdtColors.RED, context.dp(8), 2)
     }
 }
@@ -169,7 +169,7 @@ fun LinearLayout.fdtField(
             inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
         }
         setText(initial)
-        if (hint != null) setHint(hint)
+        if (hint != null) setHint(hint.loc())
         background = shape(FdtColors.FIELD_BG, FdtColors.BORDER, context.dp(8))
         setPadding(context.dp(12), context.dp(10), context.dp(12), context.dp(10))
         setTextSize(TypedValue.COMPLEX_UNIT_SP, FdtType.BODY)
@@ -200,7 +200,7 @@ fun LinearLayout.fdtCompactField(
     }
     addView(cell)
     cell.addView(android.widget.TextView(context).apply {
-        text = label
+        text = label.loc()
         textSize = FdtType.CAPTION
         setTextColor(FdtColors.MUTED)
         maxLines = 1
@@ -214,7 +214,7 @@ fun LinearLayout.fdtCompactField(
             inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
         }
         setText(initial)
-        if (hint != null) setHint(hint)
+        if (hint != null) setHint(hint.loc())
         background = shape(FdtColors.FIELD_BG, FdtColors.BORDER, context.dp(8))
         setPadding(context.dp(10), context.dp(8), context.dp(10), context.dp(8))
         setTextSize(TypedValue.COMPLEX_UNIT_SP, FdtType.BODY)
@@ -246,13 +246,13 @@ data class FdtSummaryPanel(
                 ).apply { bottomMargin = context.dp(4) }
             }
             row.addView(android.widget.TextView(row.context).apply {
-                text = label
+                text = label.loc()
                 textSize = FdtType.CAPTION
                 setTextColor(FdtColors.MUTED)
                 layoutParams = LinearLayout.LayoutParams(context.dp(132), ViewGroup.LayoutParams.WRAP_CONTENT)
             })
             row.addView(android.widget.TextView(row.context).apply {
-                text = value
+                text = value.loc()
                 textSize = FdtType.BODY
                 typeface = android.graphics.Typeface.DEFAULT_BOLD
                 setTextColor(FdtColors.TEXT)
@@ -267,7 +267,7 @@ data class FdtSummaryPanel(
         val passed = upper.startsWith("PASS")
         val failed = upper.startsWith("FAIL") || upper.startsWith("ERROR")
         statusView.visibility = android.view.View.VISIBLE
-        statusView.text = "STATUS   $value"
+        statusView.text = "STATUS".loc() + "   " + value.loc()
         statusView.setTextColor(
             when {
                 passed -> FdtColors.GREEN
@@ -328,7 +328,7 @@ fun <T> LinearLayout.fdtSpinner(
         adapter = ArrayAdapter(
             context,
             android.R.layout.simple_spinner_item,
-            items.map(labelOf),
+            items.map { labelOf(it).loc() },
         ).apply { setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item) }
         setSelection(selectedIndex)
         setBackgroundColor(FdtColors.FIELD_BG)
@@ -354,7 +354,7 @@ fun LinearLayout.fdtButton(
 ): Button {
     val ctx = context
     return Button(ctx).apply {
-        this.text = text
+        this.text = text.loc()
         isAllCaps = false
         typeface = Typeface.DEFAULT_BOLD
         textSize = textSizeSp

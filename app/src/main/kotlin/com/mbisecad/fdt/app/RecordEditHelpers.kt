@@ -45,13 +45,13 @@ internal fun recomputeWorksheet(
     val holes = mutableListOf<FdtHoleData>()
 
     edits.forEachIndexed { i, e ->
-        val a = num(e.A, "A soil", i) ?: return null to "Hole ${i + 1}: A si sahihi."
-        val b = num(e.B, "B initial sand", i) ?: return null to "Hole ${i + 1}: B si sahihi."
-        val c = num(e.C, "C final sand", i) ?: return null to "Hole ${i + 1}: C si sahihi."
-        val d = num(e.D, "D cone", i) ?: return null to "Hole ${i + 1}: D si sahihi."
-        val j = num(e.J, "J container+wet", i) ?: return null to "Hole ${i + 1}: J si sahihi."
-        val k = num(e.K, "K container+dry", i) ?: return null to "Hole ${i + 1}: K si sahihi."
-        val l = num(e.L, "L container", i) ?: return null to "Hole ${i + 1}: L si sahihi."
+        val a = num(e.A, "A soil", i) ?: return null to "Hole ${i + 1}: A si sahihi.".loc()
+        val b = num(e.B, "B initial sand", i) ?: return null to "Hole ${i + 1}: B si sahihi.".loc()
+        val c = num(e.C, "C final sand", i) ?: return null to "Hole ${i + 1}: C si sahihi.".loc()
+        val d = num(e.D, "D cone", i) ?: return null to "Hole ${i + 1}: D si sahihi.".loc()
+        val j = num(e.J, "J container+wet", i) ?: return null to "Hole ${i + 1}: J si sahihi.".loc()
+        val k = num(e.K, "K container+dry", i) ?: return null to "Hole ${i + 1}: K si sahihi.".loc()
+        val l = num(e.L, "L container", i) ?: return null to "Hole ${i + 1}: L si sahihi.".loc()
 
         val result = calcHole(
             HoleInput(A = a, B = b, C = c, J = j, K = k, L = l),
@@ -85,7 +85,7 @@ internal fun recomputeWorksheet(
         )
     }
 
-    if (comps.isEmpty()) return null to "Hakuna hole iliyokamilika."
+    if (comps.isEmpty()) return null to "Hakuna hole iliyokamilika.".loc()
 
     val layerName = layerText.substringBefore("(").trim()
     val layers = defaultLayers()
