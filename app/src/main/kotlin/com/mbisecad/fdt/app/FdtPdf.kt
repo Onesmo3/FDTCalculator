@@ -496,7 +496,10 @@ class FdtPdf(
                 listOf(cell("LOCATION:", true), cell(dashed(rec.location)), cell("TECHNICIAN:", true), cell(dashed(rec.technician))),
                 listOf(cell("LAYER:", true), cell(dashed(rec.layer)), cell("CHECKED BY:", true), cell(dashed(rec.checkedBy))),
                 listOf(cell("MATERIAL SOURCE:", true), cell(dashed(rec.materialSource)), cell("TEST DATE:", true), cell(dashed(rec.testDate))),
-                listOf(cell("ROAD:", true), cell(dashed(rec.road)), cell("RFI No:", true), cell(dashed(rec.rfiNo))),
+                if (rec.road.isNotBlank())
+                    listOf(cell("ROAD:", true), cell(rec.road.trim()), cell("RFI No:", true), cell(dashed(rec.rfiNo)))
+                else
+                    listOf(cell(""), cell(""), cell("RFI No:", true), cell(dashed(rec.rfiNo))),
             )
             widthListCache.clear(); widthListCache.addAll(cw1)
             y = drawTable(marginX, y, cw1, infoRows, TableStyle(7f, 2.5f, keepTogether = true)) + 12
