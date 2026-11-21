@@ -1,0 +1,18 @@
+# Gradle
+.kotlin/
+.gradle/
+build/
+**/build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# Local Android SDK path (kila mtumiaji ana yake)
+local.properties
+
+# Android / IDE
+.idea/
+*.iml
+*.apk
+*.aab
+
+# OS
+.DS_Store

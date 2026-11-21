@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="fdt_dark">#20261F</color>
+    <color name="fdt_green">#2E7D32</color>
+    <color name="fdt_green_light">#E8F1E8</color>
+    <color name="fdt_amber">#F5A623</color>
+    <color name="fdt_red">#C62828</color>
+    <color name="fdt_red_light">#FFEBEE</color>
+    <color name="fdt_background">#F7F7F3</color>
+    <color name="fdt_surface">#FFFFFF</color>
+    <color name="fdt_border">#D8D8D0</color>
+    <color name="fdt_text">#141414</color>
+    <color name="fdt_muted">#6B6B63</color>
+    <color name="fdt_on_dark">#F5F4EC</color>
+    <color name="fdt_on_dark_muted">#C7CDC4</color>
+</resources>
