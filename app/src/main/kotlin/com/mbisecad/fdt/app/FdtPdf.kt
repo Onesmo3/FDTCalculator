@@ -397,6 +397,9 @@ class FdtPdf(
         else String.format(Locale.US, "%.12g", v)
     }
 
+    private fun whole(v: Double): String =
+        if (v.isFinite()) String.format(Locale.US, "%.0f", v) else "-"
+
     // ---------- Single point ----------
 
     fun writeSingle(records: List<FdtRecord>) {
@@ -546,11 +549,11 @@ class FdtPdf(
             mainRows += dataRow("", "Weight of Cylinder", "g") { if (it.cylinderWeight != 0.0) raw(it.cylinderWeight) else "-" }
             mainRows += dataRow("A", "Weight of Soil From Hole", "g") { dashed(raw(it.A)) }
             mainRows += dataRow("B", "Initial Sand in Cylinder", "g") { dashed(raw(it.B)) }
-            mainRows += dataRow("C", "Final Sand in Cylinder", "g") { dashed(raw(it.C)) }
+            mainRows += dataRow("C", "Final Sand in Cylinder", "g") { dashed(whole(it.C)) }
             mainRows += dataRow("D", "Sand in Cone", "g") { if (it.D != 0.0) raw(it.D) else "-" }
-            mainRows += dataRow("E", "Wt of Sand in Hole (B-C-D)", "g") { fixed(it.sandInHole, 2) }
+            mainRows += dataRow("E", "Wt of Sand in Hole (B-C-D)", "g") { if (it.sandInHole != 0.0) whole(it.sandInHole) else "-" }
             mainRows += dataRow("F", "Density of Sand (calibrated)", "g/cm³") { fixed(if (it.sandDensityOfHole != 0.0) it.sandDensityOfHole else rec.sandDensity, 3) }
-            mainRows += dataRow("G", "Volume of Hole (E/F)", "cm³") { fixed(it.volume, 2) }
+            mainRows += dataRow("G", "Volume of Hole (E/F)", "cm³") { if (it.volume != 0.0) whole(it.volume) else "-" }
             mainRows += dataRow("H", "Wet Density (A/G)", "g/cm³") { fixed(it.wetDensity, 3) }
 
             mainRows += section("MOISTURE CONTENT DETERMINATION")
