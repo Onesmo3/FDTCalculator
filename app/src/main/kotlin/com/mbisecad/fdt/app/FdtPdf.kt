@@ -416,13 +416,13 @@ class FdtPdf(
         val colW = listOf(22.0, 58.0, 88.0, 40.0, 72.0, 36.0, 36.0, 46.0, 42.0, 38.0, 45.0)
 
         val groups = records.groupBy {
-            listOf(it.road, it.location, it.site).joinToString("__") { v -> v.trim().lowercase() }
+            listOf(it.road, it.location).joinToString("__") { v -> v.trim().lowercase() }
         }
         var pointCounter = 0
         for ((_, group) in groups) {
             if (y > 760) newPage()
             val road = group.first().road
-            val chain = group.first().site
+            val chain = group.first().location
             val label = buildString {
                 if (road.isNotBlank()) append("$road - ")
                 append(if (chain.isNotBlank()) "KM $chain" else "KM haijaainishwa")
@@ -445,7 +445,7 @@ class FdtPdf(
                 rows += listOf(
                     cell(pointCounter.toString()),
                     cell(dashed(r.testDate.ifBlank { r.createdAt.take(10) })),
-                    cell(dashed(r.location.ifBlank { r.site })),
+                    cell(dashed(r.location)),
                     cell("-"),
                     cell(dashed(r.layer)),
                     cell(dashed(fixed(r.mdd, 3))),

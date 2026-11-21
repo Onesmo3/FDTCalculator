@@ -119,8 +119,6 @@ private fun JSONObject.toHole(): FdtHoleData = FdtHoleData(
 private fun FdtRecord.toJson(): JSONObject = JSONObject().apply {
     put("id", id)
     put("createdAt", createdAt)
-    put("project", project)
-    put("site", site)
     put("testDate", testDate)
     put("mode", mode)
     put("layer", layer)

@@ -100,7 +100,6 @@ class RecordsActivity : BaseActivity() {
                 addView(TextView(context).apply {
                     text = buildString {
                         appendLine("${record.createdAt}  •  ${record.mode}")
-                        appendLine("Project: ${record.project.ifBlank { "-" }} | Site: ${record.site.ifBlank { "-" }}".loc())
                         append("Layer: ${record.layer.ifBlank { "-" }}".loc())
                     }
                     textSize = FdtType.BODY
@@ -187,8 +186,6 @@ class RecordsActivity : BaseActivity() {
         val text = buildString {
             appendLine("Mode      : ${record.mode}".loc())
             appendLine("Date      : ${record.testDate.ifBlank { "-" }}".loc())
-            appendLine("Project   : ${record.project.ifBlank { "-" }}".loc())
-            appendLine("Site      : ${record.site.ifBlank { "-" }}".loc())
             appendLine("Layer     : ${record.layer.ifBlank { "-" }}".loc())
             appendLine("Sand rho  : ${record.sandDensity}".loc())
             appendLine("MDD       : ${record.mdd}".loc())

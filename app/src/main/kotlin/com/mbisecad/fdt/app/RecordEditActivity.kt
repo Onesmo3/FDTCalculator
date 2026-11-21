@@ -13,8 +13,6 @@ class RecordEditActivity : BaseActivity() {
     private lateinit var record: FdtRecord
     private val holeEdits = mutableListOf<HoleEdit>()
 
-    private lateinit var project: EditText
-    private lateinit var site: EditText
     private lateinit var testDate: EditText
     private lateinit var location: EditText
     private lateinit var road: EditText
@@ -61,7 +59,6 @@ class RecordEditActivity : BaseActivity() {
             reportCard.addView(row)
             return row.fdtCompactField(a, av, false) to row.fdtCompactField(b, bv, false)
         }
-        (reportRow("Project", "Site", record.project, record.site)).let { project = it.first; site = it.second }
         (reportRow("Test date", "Location", record.testDate, record.location)).let { testDate = it.first; location = it.second }
         (reportRow("Road", "RFI No", record.road, record.rfiNo)).let { road = it.first; rfiNo = it.second }
         (reportRow("Technician", "Checked by", record.technician, record.checkedBy)).let { technician = it.first; checkedBy = it.second }
@@ -141,8 +138,8 @@ class RecordEditActivity : BaseActivity() {
         }
 
         var updated = record.copy(
-            project = project.text.toString().trim(),
-            site = site.text.toString().trim(),
+            project = "",
+            site = "",
             testDate = testDate.text.toString().trim(),
             location = location.text.toString().trim(),
             road = road.text.toString().trim(),

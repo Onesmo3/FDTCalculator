@@ -34,8 +34,6 @@ class WorksheetActivity : BaseActivity() {
         val cylinder: EditText, val cylinderWeight: EditText, val containerNo: EditText,
     )
 
-    private lateinit var project: EditText
-    private lateinit var site: EditText
     private lateinit var testDate: EditText
     private lateinit var location: EditText
     private lateinit var road: EditText
@@ -81,7 +79,6 @@ class WorksheetActivity : BaseActivity() {
                 return r.fdtCompactField(firstLabel, "", false) to r.fdtCompactField(secondLabel, "", false)
             }
 
-            (grid2("Project (optional)", "Site (optional)")).let { project = it.first; site = it.second }
             (grid2("Test date", "Location")).let { testDate = it.first; location = it.second }
             (grid2("Road", "RFI No")).let { road = it.first; rfiNo = it.second }
             (grid2("Technician", "Checked by")).let { technician = it.first; checkedBy = it.second }
@@ -371,8 +368,6 @@ class WorksheetActivity : BaseActivity() {
         lastRecord = FdtRecord(
             id = UUID.randomUUID().toString(),
             createdAt = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US).format(Date()),
-            project = project.text.toString().trim(),
-            site = site.text.toString().trim(),
             testDate = testDate.text.toString().trim(),
             mode = "WORKSHEET",
             layer = layerLabel,
