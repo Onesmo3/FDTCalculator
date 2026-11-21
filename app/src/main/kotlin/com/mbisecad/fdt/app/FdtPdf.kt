@@ -282,9 +282,13 @@ class FdtPdf(
     // ---------- kichwa (letterhead) ----------
 
     private fun letterhead(marginX: Double, title: String): Double {
-        val maxLogoW = 85.0
-        val maxLogoH = 42.0
-        val y0 = 34.0
+        // Muundo wa 1.png (bila client): contractor kushoto, consultant kulia,
+        // jina la mradi katikati kwenye safu moja na logos.
+        // Muundo wa 2.png (na client): logos tatu juu, kisha jina la mradi katikati chini yake.
+        val hasClient = project.clientLogo != null || project.clientName.isNotBlank()
+        val maxLogoW = if (hasClient) 85.0 else 100.0
+        val maxLogoH = if (hasClient) 56.0 else 42.0
+        val y0 = 30.0
         val centerX = PAGE_W / 2
 
         val left = project.companyLogo
@@ -292,12 +296,13 @@ class FdtPdf(
         val right = project.consultantLogo
         fun dims(b: Bitmap?): Pair<Double, Double> {
             if (b == null) return 0.0 to 0.0
-            val s = min(maxLogoW / b.width, maxLogoH / b.height)
-            return (b.width * s) to (b.height * s)
+            val scale = min(maxLogoW / b.width, maxLogoH / b.height)
+            return (b.width * scale) to (b.height * scale)
         }
         val (ldW, ldH) = dims(left)
         val (cdW, cdH) = dims(client)
         val (rdW, rdH) = dims(right)
+
         if (left != null) {
             canvas!!.drawBitmap(
                 left, null as android.graphics.Rect?,
@@ -315,8 +320,7 @@ class FdtPdf(
                 Paint(Paint.FILTER_BITMAP_FLAG)
             )
         }
-
-        if (client != null) {
+        if (hasClient && client != null) {
             canvas!!.drawBitmap(
                 client, null as android.graphics.Rect?,
                 RectF(
@@ -327,24 +331,29 @@ class FdtPdf(
             )
         }
 
-        // Logos ziko juu. Majina yote yaandikwe safu moja: Contractor | Project | Consultant.
-        // Project name inashuka chini ya client logo (logosBottom + gap) ili isibanane nayo.
-        val logosBottom = y0 + maxLogoH
-        val namesY = logosBottom + 10
+        val logoRowH = maxOf(ldH, rdH, if (hasClient) cdH else 0.0)
         val sideW = 140.0
         val gap = 10.0
-        val centerColW = maxOf(120.0, PAGE_W - marginX * 2 - sideW * 2 - gap * 2)
-        val titleFont = paint(11f, true, false, INK)
+        val namesY = if (hasClient) y0 + maxLogoH + 12.0 else y0 + logoRowH / 2 + 3.0
+        val centerColW = if (hasClient) {
+            PAGE_W - marginX * 2 - 20.0
+        } else {
+            val leftEdge = if (left != null) marginX + ldW + gap else marginX
+            val rightEdge = if (right != null) PAGE_W - marginX - rdW - gap else PAGE_W - marginX
+            maxOf(120.0, rightEdge - leftEdge)
+        }
+        val titleSize = if (hasClient) 10.5f else 11f
+        val titleFont = paint(titleSize, true, false, INK)
         val nameFont = paint(7.5f, false, false, INK)
 
         var centerCy = namesY
         if (project.name.isNotEmpty()) {
             for (line in wrap(project.name.uppercase(Locale.getDefault()), titleFont, centerColW)) {
-                text(line, centerX, centerCy, 11f, true, align = Align.CENTER)
+                text(line, centerX, centerCy, titleSize, true, align = Align.CENTER)
                 centerCy += 12.0
             }
         }
-        if (project.clientName.isNotEmpty()) {
+        if (hasClient && project.clientName.isNotEmpty()) {
             text("Client: ${project.clientName}", centerX, centerCy, 7.5f, align = Align.CENTER)
             centerCy += 9.0
         }
@@ -356,7 +365,6 @@ class FdtPdf(
                 leftCy += 8.0
             }
         }
-
         var rightCy = namesY
         if (project.consultant.isNotEmpty()) {
             for (line in wrap(project.consultant, nameFont, sideW)) {
@@ -365,8 +373,7 @@ class FdtPdf(
             }
         }
 
-        val rowBottom = maxOf(centerCy, leftCy, rightCy, logosBottom) + 4
-
+        val rowBottom = maxOf(centerCy, leftCy, rightCy, y0 + logoRowH) + if (hasClient) 4.0 else 2.0
         var yy = rowBottom + 8
         hline(marginX, PAGE_W - marginX, yy, 1f)
         yy += 16
